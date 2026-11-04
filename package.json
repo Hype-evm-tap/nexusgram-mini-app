@@ -3,6 +3,11 @@
   "version": "0.1.1",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "wrangler dev", "deploy": "wrangler deploy", "db:migrate": "wrangler d1 execute nexusgram-db --remote --file=./schema.sql" },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create nexusgram-db",
+    "db:migrate": "wrangler d1 execute nexusgram-db --remote --file=./schema.sql"
+  },
   "devDependencies": { "wrangler": "^4.0.0" }
 }

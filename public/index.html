@@ -1,19 +1,76 @@
 <!doctype html>
-<html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#071322"><meta name="description" content="NexusGram community mining — earn NXG Points before TGE.">
-<title>NexusGram — NXG Community Mining</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script><script src="https://sad.adsgram.ai/js/sad.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="/app.css"></head>
-<body><div class="app-shell">
-<header class="topbar"><div class="brand"><img src="https://i.ibb.co/DfFShN7D/56093-removebg-preview.png" alt="NexusGram coin"><div><b>NEXUSGRAM</b><small>COMMUNITY MINING</small></div></div><button class="profile-pill" id="profileButton"><span class="avatar" id="avatar">N</span><span id="username">Miner</span><i class="chevron">⌄</i></button></header>
-<main>
-<section class="page active" id="page-mine"><div class="phase-pill"><span class="pulse"></span> PRE-TGE COMMUNITY PHASE</div><div class="balance-block"><div class="eyebrow">YOUR MINING BALANCE</div><div class="balance"><span id="balance">0</span><span class="unit">NXG PTS</span></div><div class="subtle">Points are not transferable tokens. TGE is planned for a future phase.</div></div><div class="coin-stage"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><button class="coin-button" id="tapButton" aria-label="Tap to mine"><img src="https://i.ibb.co/DfFShN7D/56093-removebg-preview.png" alt="Tap NexusGram coin"><span class="tap-hint">TAP TO MINE</span></button><div id="floatLayer"></div></div><div class="energy-card"><div class="energy-head"><span>⚡ ENERGY</span><b id="energyText">1000 / 1000</b></div><div class="energy-track"><div id="energyFill" class="energy-fill"></div></div><div class="energy-foot"><span>Regenerates automatically</span><span id="regenText">+5 / sec</span></div></div><div class="quick-stats"><div><small>PER TAP</small><b id="tapPower">+1</b></div><div><small>MINING STREAK</small><b id="streak">0 days</b></div><div><small>RANK</small><b id="rank">Rookie</b></div></div><div class="banner-card"><div class="banner-icon">✦</div><div><b>Grow with the Nexus community</b><p>Invite friends, complete missions and build your mining streak.</p></div><button data-go="squad">Invite</button></div></section>
-<section class="page" id="page-boost"><div class="page-heading"><div><span class="eyebrow">UPGRADE YOUR MINING</span><h1>Boost Lab</h1></div><div class="mini-balance">✦ <span id="boostBalance">0</span></div></div><div class="boost-card"><div class="boost-symbol">✦</div><div class="boost-copy"><b>Multitap</b><p>Earn more points with every tap.</p><small>Level <span id="multiLevel">0</span> · Next: <span id="multiCost">100</span> pts</small></div><button class="buy-button" data-upgrade="multitap">Upgrade</button></div><div class="boost-card"><div class="boost-symbol">ϟ</div><div class="boost-copy"><b>Energy Limit</b><p>Increase your maximum energy capacity.</p><small>Level <span id="energyLevel">0</span> · Next: <span id="energyCost">150</span> pts</small></div><button class="buy-button" data-upgrade="energy">Upgrade</button></div><div class="boost-card"><div class="boost-symbol">↯</div><div class="boost-copy"><b>Recharge Speed</b><p>Restore energy faster over time.</p><small>Level <span id="rechargeLevel">0</span> · Next: <span id="rechargeCost">125</span> pts</small></div><button class="buy-button" data-upgrade="recharge">Upgrade</button></div><div class="info-note">Upgrades use NXG Points inside the app only. No token purchase or wallet connection is available before TGE.</div></section>
-<section class="page" id="page-squad"><div class="page-heading"><div><span class="eyebrow">BUILD THE NETWORK</span><h1>Your Squad</h1></div><div class="mini-balance">♧ <span id="refCount">0</span></div></div><div class="ref-hero"><div class="ref-orb">♧</div><h2>Mining is better together.</h2><p>Invite real friends to join NexusGram. Both of you receive a community points bonus when the referral becomes active.</p><div class="ref-reward">+250 <small>NXG PTS PER ACTIVE FRIEND</small></div><button class="primary-button" id="shareButton">Invite friends ↗</button><button class="copy-button" id="copyButton">Copy invite link</button></div><div class="section-title">YOUR NETWORK <span id="refTotal">0 invited</span></div><div class="list-card" id="refList"><div class="empty-state">Your squad is waiting. Invite your first friend!</div></div><div class="info-note">Referral rewards are limited to genuine new Telegram accounts. Self-referrals and suspicious activity may be disqualified.</div></section>
-<section class="page" id="page-tasks"><div class="page-heading"><div><span class="eyebrow">EARN COMMUNITY POINTS</span><h1>Daily Missions</h1></div><div class="mini-balance">✦ <span id="taskBalance">0</span></div></div><div class="daily-card"><div><span class="eyebrow">DAILY CHECK-IN</span><b>Keep your streak alive</b><p>Come back every day to collect your bonus.</p></div><button class="primary-button" id="dailyButton">Claim +50</button></div><div class="section-title">OFFICIAL COMMUNITY <span>Stay connected</span></div><div class="task-card"><div class="task-icon">➤</div><div class="task-copy"><b>NexusGram Telegram Channel</b><p>Follow official announcements and launch updates.</p><small>Official channel</small></div><button class="task-action" data-task="news">Open ↗</button></div><div class="task-card"><div class="task-icon">▶</div><div class="task-copy"><b>Nexus Official YouTube</b><p>Watch videos and project updates.</p><small>Official YouTube</small></div><button class="task-action" data-task="youtube">Open ↗</button></div><div class="task-card ad-task"><div class="task-icon">▶</div><div class="task-copy"><b>Watch a rewarded ad</b><p>Optional ad. Reward only after a valid completion.</p><small id="adRewardLabel">Adsgram setup required</small></div><button class="task-action" id="watchAdButton">Watch</button></div><div class="info-note">Community links are informational in this version. No points are awarded simply for opening a link; verified mission rewards can be enabled after platform checks.</div></section>
-<section class="page" id="page-leaderboard"><div class="page-heading"><div><span class="eyebrow">COMMUNITY RANKINGS</span><h1>Top Miners</h1></div><div class="mini-balance">🏆 LIVE</div></div><div class="leader-tabs"><button class="selected">All time</button><span>Updated from server</span></div><div class="leader-list" id="leaderList"><div class="empty-state">Leaderboard loads after Telegram sign-in.</div></div></section>
-<section class="page" id="page-profile"><div class="page-heading"><div><span class="eyebrow">YOUR NEXUS ID</span><h1>Profile</h1></div></div><div class="profile-card"><div class="profile-avatar" id="profileAvatar">N</div><h2 id="profileName">Nexus Miner</h2><p id="telegramId">Telegram account</p><div class="profile-metrics"><div><b id="profilePoints">0</b><small>NXG POINTS</small></div><div><b id="profileReferrals">0</b><small>REFERRALS</small></div><div><b id="profileLevel">0</b><small>UPGRADE LEVEL</small></div></div></div><div class="settings-row"><span>Token launch</span><b>Future TGE</b></div><div class="settings-row"><span>Wallet connection</span><b class="muted-status">Not available yet</b></div><div class="settings-row"><span>Network</span><b>TON · planned</b></div><div class="settings-row"><span>App version</span><b>0.1.1 Preview</b></div><div class="info-note">NXG Points are in-app community points, not an issued Jetton, financial asset or guaranteed future allocation. Final eligibility and token distribution rules will be published before TGE.</div></section>
-</main>
-<nav class="bottom-nav" aria-label="Main navigation"><button class="nav-item active" data-page="mine"><span>⌂</span><small>Mine</small></button><button class="nav-item" data-page="boost"><span>✦</span><small>Boost</small></button><button class="nav-item" data-page="squad"><span>♧</span><small>Squad</small></button><button class="nav-item" data-page="tasks"><span>☷</span><small>Tasks</small></button><button class="nav-item" data-page="leaderboard"><span>♛</span><small>Ranks</small></button></nav><div class="toast" id="toast" role="status"></div><div class="loading-screen" id="loadingScreen"><div class="loading-logo"><img src="https://i.ibb.co/DfFShN7D/56093-removebg-preview.png" alt=""></div><b>NEXUSGRAM</b><span>Connecting to the network…</span></div></div><script src="/app.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#071322" />
+  <meta name="description" content="NexusGram community mining — earn NXG Points before TGE." />
+  <title>NexusGram — NXG Community Mining</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand"><img src="https://i.ibb.co/DfFShN7D/56093-removebg-preview.png" alt="NexusGram coin"/><div><b>NEXUSGRAM</b><small>COMMUNITY MINING</small></div></div>
+      <button class="profile-pill" id="profileButton" aria-label="Profile"><span class="avatar" id="avatar">N</span><span id="username">Miner</span><i class="chevron">⌄</i></button>
+    </header>
+    <main>
+      <section class="page active" id="page-mine">
+        <div class="phase-pill"><span class="pulse"></span> PRE-TGE COMMUNITY PHASE</div>
+        <div class="balance-block"><div class="eyebrow">YOUR MINING BALANCE</div><div class="balance"><span id="balance">0</span><span class="unit">NXG PTS</span></div><div class="subtle">Points are not transferable tokens. TGE is planned for a future phase.</div></div>
+        <div class="coin-stage"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><button class="coin-button" id="tapButton" aria-label="Tap to mine"><img src="https://i.ibb.co/DfFShN7D/56093-removebg-preview.png" alt="Tap NexusGram coin"/><span class="tap-hint">TAP TO MINE</span></button><div id="floatLayer"></div></div>
+        <div class="energy-card"><div class="energy-head"><span>⚡ ENERGY</span><b id="energyText">1000 / 1000</b></div><div class="energy-track"><div id="energyFill" class="energy-fill"></div></div><div class="energy-foot"><span>Regenerates automatically</span><span id="regenText">+5 / sec</span></div></div>
+        <div class="quick-stats"><div><small>PER TAP</small><b id="tapPower">+1</b></div><div><small>MINING STREAK</small><b id="streak">0 days</b></div><div><small>RANK</small><b id="rank">Rookie</b></div></div>
+        <div class="banner-card"><div class="banner-icon">✦</div><div><b>Grow with the Nexus community</b><p>Invite friends, complete missions and build your mining streak.</p></div><button data-go="squad">Invite</button></div>
+      </section>
+      <section class="page" id="page-boost">
+        <div class="page-heading"><div><span class="eyebrow">UPGRADE YOUR MINING</span><h1>Boost Lab</h1></div><div class="mini-balance">✦ <span id="boostBalance">0</span></div></div>
+        <div class="boost-card"><div class="boost-symbol">✦</div><div class="boost-copy"><b>Multitap</b><p>Earn more points with every tap.</p><small>Level <span id="multiLevel">0</span> · Next: <span id="multiCost">100</span> pts</small></div><button class="buy-button" data-upgrade="multitap">Upgrade</button></div>
+        <div class="boost-card"><div class="boost-symbol">ϟ</div><div class="boost-copy"><b>Energy Limit</b><p>Increase your maximum energy capacity.</p><small>Level <span id="energyLevel">0</span> · Next: <span id="energyCost">150</span> pts</small></div><button class="buy-button" data-upgrade="energy">Upgrade</button></div>
+        <div class="boost-card"><div class="boost-symbol">↯</div><div class="boost-copy"><b>Recharge Speed</b><p>Restore energy faster over time.</p><small>Level <span id="rechargeLevel">0</span> · Next: <span id="rechargeCost">125</span> pts</small></div><button class="buy-button" data-upgrade="recharge">Upgrade</button></div>
+        <div class="info-note">Upgrades use NXG Points inside the app only. No token purchase or wallet connection is available before TGE.</div>
+      </section>
+      <section class="page" id="page-squad">
+        <div class="page-heading"><div><span class="eyebrow">BUILD THE NETWORK</span><h1>Your Squad</h1></div><div class="mini-balance">♧ <span id="refCount">0</span></div></div>
+        <div class="ref-hero"><div class="ref-orb">♧</div><h2>Mining is better together.</h2><p>Invite real friends to join NexusGram. Both of you receive a community points bonus when the referral becomes active.</p><div class="ref-reward">+250 <small>NXG PTS PER ACTIVE FRIEND</small></div><button class="primary-button" id="shareButton">Invite friends ↗</button><button class="copy-button" id="copyButton">Copy invite link</button></div>
+        <div class="section-title">YOUR NETWORK <span id="refTotal">0 invited</span></div><div class="list-card" id="refList"><div class="empty-state">Your squad is waiting. Invite your first friend!</div></div>
+        <div class="info-note">Referral rewards are limited to genuine new Telegram accounts. Self-referrals and suspicious activity may be disqualified.</div>
+      </section>
+      <section class="page" id="page-tasks">
+        <div class="page-heading"><div><span class="eyebrow">EARN COMMUNITY POINTS</span><h1>Daily Missions</h1></div><div class="mini-balance">✦ <span id="taskBalance">0</span></div></div>
+        <div class="daily-card"><div><span class="eyebrow">DAILY CHECK-IN</span><b>Keep your streak alive</b><p>Come back every day to collect your bonus.</p></div><button class="primary-button" id="dailyButton">Claim +50</button></div>
+        <div class="section-title">OFFICIAL COMMUNITY <span>Stay connected</span></div>
+        <div class="task-card"><div class="task-icon">➤</div><div class="task-copy"><b>NexusGram Telegram Channel</b><p>Follow official announcements and launch updates.</p><small>Official channel</small></div><button class="task-action" data-task="news">Open ↗</button></div>
+        <div class="task-card"><div class="task-icon">▶</div><div class="task-copy"><b>Nexus Official YouTube</b><p>Watch videos and project updates.</p><small>Official YouTube</small></div><button class="task-action" data-task="youtube">Open ↗</button></div>
+        <div class="task-card ad-task"><div class="task-icon">▶</div><div class="task-copy"><b>Watch a rewarded ad</b><p>Optional ad. Reward only after a valid completion.</p><small id="adRewardLabel">Adsgram setup required</small></div><button class="task-action" id="watchAdButton">Watch</button></div>
+        <div class="info-note">Community links are informational in this version. No points are awarded simply for opening a link; verified mission rewards can be enabled after the required platform checks are configured.</div>
+      </section>
+      <section class="page" id="page-leaderboard">
+        <div class="page-heading"><div><span class="eyebrow">COMMUNITY RANKINGS</span><h1>Top Miners</h1></div><div class="mini-balance">🏆 LIVE</div></div>
+        <div class="leader-tabs"><button class="selected">All time</button><span>Updated from server</span></div><div class="leader-list" id="leaderList"><div class="empty-state">Leaderboard loads after Telegram sign-in.</div></div>
+      </section>
+      <section class="page" id="page-profile">
+        <div class="page-heading"><div><span class="eyebrow">YOUR NEXUS ID</span><h1>Profile</h1></div></div>
+        <div class="profile-card"><div class="profile-avatar" id="profileAvatar">N</div><h2 id="profileName">Nexus Miner</h2><p id="telegramId">Telegram account</p><div class="profile-metrics"><div><b id="profilePoints">0</b><small>NXG POINTS</small></div><div><b id="profileReferrals">0</b><small>REFERRALS</small></div><div><b id="profileLevel">0</b><small>UPGRADE LEVEL</small></div></div></div>
+        <div class="settings-row"><span>Token launch</span><b>Future TGE</b></div><div class="settings-row"><span>Wallet connection</span><b class="muted-status">Not available yet</b></div><div class="settings-row"><span>Network</span><b>TON · planned</b></div><div class="settings-row"><span>App version</span><b>0.1.1 Preview</b></div>
+        <div class="info-note">NXG Points are in-app community points, not an issued Jetton, financial asset or guaranteed future allocation. Final eligibility and token distribution rules will be published before TGE.</div>
+      </section>
+    </main>
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-item active" data-page="mine"><span>⌂</span><small>Mine</small></button>
+      <button class="nav-item" data-page="boost"><span>✦</span><small>Boost</small></button>
+      <button class="nav-item" data-page="squad"><span>♧</span><small>Squad</small></button>
+      <button class="nav-item" data-page="tasks"><span>☷</span><small>Tasks</small></button>
+      <button class="nav-item" data-page="leaderboard"><span>♛</span><small>Ranks</small></button>
+    </nav>
+    <div class="toast" id="toast" role="status"></div>
+    <div class="loading-screen" id="loadingScreen"><div class="loading-logo"><img src="https://i.ibb.co/DfFShN7D/56093-removebg-preview.png" alt=""/></div><b>NEXUSGRAM</b><span>Connecting to the network…</span></div>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
