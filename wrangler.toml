@@ -1,0 +1,23 @@
+name = "nexusgram-mini-app"
+main = "src/worker.js"
+compatibility_date = "2026-11-04"
+workers_dev = true
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/api/*", "/health"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "nexusgram-db"
+database_id = "f4c9d61d-366e-438a-9e98-70d4f1a5a1bf"
+
+[vars]
+BOT_USERNAME = "Nexusgram_official_bot"
+ADSGRAM_BLOCK_ID = ""
+ADSGRAM_REWARD_MODE = "disabled"
+ADMIN_IDS = "7976207482"
+NEWS_URL = "https://t.me/nexusgram_official"
+CHAT_URL = ""
+YOUTUBE_URL = "https://youtube.com/@rajtilakeditz?si=OLEQqNUEq8H4240c"
