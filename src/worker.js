@@ -16,9 +16,12 @@ function fail(message,status=400){ return json({error:message},status); }
 async function hmac(keyBytes, message){ const key=await crypto.subtle.importKey('raw',keyBytes,{name:'HMAC',hash:'SHA-256'},false,['sign']); return new Uint8Array(await crypto.subtle.sign('HMAC',key,new TextEncoder().encode(message))); }
 function hex(bytes){return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('')}
 function safeEqual(a,b){if(a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
+function normalizeBotToken(value){
+  return String(value||'').trim().replace(/^Bearer\\s+/i,'').replace(/^['"]|['"]$/g,'');
+}
 async function verifyInitData(initData,botToken){
   initData=String(initData||'').trim();
-  botToken=String(botToken||'').trim();
+  botToken=normalizeBotToken(botToken);
   if(!initData||!botToken)throw new Error('Telegram sign-in is not configured');
   const params=new URLSearchParams(initData);
   const received=String(params.get('hash')||'').trim().toLowerCase();

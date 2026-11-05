@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS admin_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at INTEGER NOT NULL, updated_by TEXT NOT NULL DEFAULT '');
-CREATE TABLE IF NOT EXISTS blocked_users (telegram_id TEXT PRIMARY KEY, created_at INTEGER NOT NULL, admin_id TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS admin_audit (id INTEGER PRIMARY KEY AUTOINCREMENT, admin_id TEXT NOT NULL, action TEXT NOT NULL, target TEXT NOT NULL DEFAULT '', detail TEXT NOT NULL DEFAULT '', created_at INTEGER NOT NULL);
-CREATE INDEX IF NOT EXISTS idx_admin_audit_created ON admin_audit(created_at DESC);
