@@ -45,8 +45,8 @@
         <div class="page-heading"><div><span class="eyebrow">EARN COMMUNITY POINTS</span><h1>Daily Missions</h1></div><div class="mini-balance icon-balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg><span id="taskBalance">0</span></div></div>
         <div class="daily-card"><div><span class="eyebrow">DAILY CHECK-IN</span><b>Keep your streak alive</b><p>Come back every day to collect your bonus.</p></div><button class="primary-button" id="dailyButton">Claim +50</button></div>
         <div class="section-title">OFFICIAL COMMUNITY <span>Stay connected</span></div>
-        <div class="task-card"><div class="task-icon icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a4 4 0 110-8 4 4 0 010 8zm8-1a3 3 0 100-6 3 3 0 000 6zM2 20a6 6 0 0112 0v1H2v-1zm13 1v-1a6.5 6.5 0 00-2-4.7A5 5 0 0119 20v1h-4z"/></svg></div><div class="task-copy"><b>NexusGram Telegram Channel</b><p>Follow official announcements and launch updates.</p><small>Official channel</small></div><button class="task-action" data-task="news">Open ↗</button></div>
-        <div class="task-card"><div class="task-icon icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div><div class="task-copy"><b>Nexus Official YouTube</b><p>Watch videos and project updates.</p><small>Official YouTube</small></div><button class="task-action" data-task="youtube">Open ↗</button></div>
+        <div class="task-card"><div class="task-icon icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a4 4 0 110-8 4 4 0 010 8zm8-1a3 3 0 100-6 3 3 0 000 6zM2 20a6 6 0 0112 0v1H2v-1zm13 1v-1a6.5 6.5 0 00-2-4.7A5 5 0 0119 20v1h-4z"/></svg></div><div class="task-copy"><b>NexusGram Telegram Channel</b><p>Follow official announcements and launch updates.</p><small>Official channel</small></div><button class="task-action" data-task="news">Open ↗</button><button class="task-action" data-claim-task="news">Claim</button></div>
+        <div class="task-card"><div class="task-icon icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div><div class="task-copy"><b>Nexus Official YouTube</b><p>Watch videos and project updates.</p><small>Official YouTube</small></div><button class="task-action" data-task="youtube">Open ↗</button><button class="task-action" data-claim-task="youtube">Claim</button></div>
         <div class="task-card ad-task"><div class="task-icon icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></div><div class="task-copy"><b>Watch a rewarded ad</b><p>Optional ad. Reward only after a valid completion.</p><small id="adRewardLabel">Adsgram setup required</small></div><button class="task-action" id="watchAdButton">Watch</button></div>
         <div class="info-note">Community links are informational in this version. No points are awarded simply for opening a link; verified mission rewards can be enabled after the required platform checks are configured.</div>
       </section>
@@ -61,16 +61,40 @@
         <div class="info-note">NXG Points are in-app community points, not an issued Jetton, financial asset or guaranteed future allocation. Final eligibility and token distribution rules will be published before TGE.</div>
       </section>
     </main>
+    
+<section class="page" id="page-admin">
+  <div class="page-heading"><div><span class="eyebrow">OWNER CONTROL</span><h1>Admin Panel</h1></div><div class="mini-balance">LIVE</div></div>
+  <div class="admin-grid">
+    <label>Tap reward<input id="admTapReward" type="number" min="0"></label>
+    <label>Energy / tap<input id="admEnergyCost" type="number" min="1"></label>
+    <label>Daily reward<input id="admDailyBonus" type="number" min="0"></label>
+    <label>Referral reward<input id="admReferralBonus" type="number" min="0"></label>
+    <label>Ad reward<input id="admAdReward" type="number" min="0"></label>
+    <label>Multitap base cost<input id="admMultiCost" type="number" min="0"></label>
+    <label>Energy base cost<input id="admEnergyCostBase" type="number" min="0"></label>
+    <label>Recharge base cost<input id="admRechargeCost" type="number" min="0"></label>
+    <label>Telegram URL<input id="admNewsUrl" type="url"></label>
+    <label>Chat URL<input id="admChatUrl" type="url"></label>
+    <label>YouTube URL<input id="admYoutubeUrl" type="url"></label>
+  </div>
+  <div class="admin-switches">
+    <button data-admin-toggle="mining_enabled">Mining <b id="admMining">ON</b></button>
+    <button data-admin-toggle="ads_enabled">Ads <b id="admAds">OFF</b></button>
+    <button data-admin-toggle="maintenance_mode">Maintenance <b id="admMaintenance">OFF</b></button>
+  </div>
+  <button class="primary-button admin-save" id="adminSave">Save all changes</button>
+  <div class="info-note">Owner-only controls. Changes are saved server-side and apply to the whole app without changing user balances.</div>
+</section>
     <nav class="bottom-nav" aria-label="Main navigation">
       <button class="nav-item active" data-page="mine" aria-label="Mine"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3l-5 5 3 3-6 6 2 2 6-6 3 3 5-5-8-8z"/></svg></span></button>
       <button class="nav-item" data-page="boost" aria-label="Boost"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></span></button>
       <button class="nav-item" data-page="squad" aria-label="Squad"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a4 4 0 110-8 4 4 0 010 8zm8-1a3 3 0 100-6 3 3 0 000 6zM2 20a6 6 0 0112 0v1H2v-1zm13 1v-1a6.5 6.5 0 00-2-4.7A5 5 0 0119 20v1h-4z"/></svg></span></button>
       <button class="nav-item" data-page="tasks" aria-label="Tasks"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg></span></button>
       <button class="nav-item" data-page="leaderboard" aria-label="Leaderboard"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v4h3v2c0 3-2 5-5 6a4 4 0 01-2 2v2h4v2H7v-2h4v-2a4 4 0 01-2-2c-3-1-5-3-5-6V7h3V3zm-3 6c0 1.7 1 2.8 3 3.5V9H4zm16 0h-3v3.5c2-.7 3-1.8 3-3.5z"/></svg></span></button>
-    </nav>
+    <button class="nav-item admin-nav" data-page="admin" aria-label="Admin"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7L12 2z"/></svg></span></button></nav>
     <div class="toast" id="toast" role="status"></div>
     <div class="loading-screen" id="loadingScreen"><div class="loading-logo"><img src="https://i.ibb.co/DfFShN7D/56093-removebg-preview.png" alt=""/></div><b>NEXUSGRAM</b><span>Connecting to the network…</span></div>
   </div>
-  <script src="/app.js?v=20261105-telegramfix"></script>
+  <script src="/app.js?v=20261105-admintap2"></script>
 </body>
 </html>
