@@ -42,7 +42,8 @@ async function handle(request,env){const url=new URL(request.url);const botRespo
    verified=await auth(request,env,body);
    if((await readAdminSetting(env,'mining_enabled','1'))!=='1')return fail('Mining is temporarily paused',403);
    const count=Math.max(1,Math.min(20,Number(body.count||0)));
-   await ensureUser(env,verified);
+   const ensured=await ensureUser(env,verified);
+   const readyUser=await refreshed(env,ensured);
    const now=Date.now(),id=String(verified.user.id);
    const tapReward=Math.max(0,Math.min(100,Number(await readAdminSetting(env,'tap_reward','1'))||1));
    const energyCost=Math.max(1,Math.min(100,Number(await readAdminSetting(env,'energy_cost','10'))||10));
