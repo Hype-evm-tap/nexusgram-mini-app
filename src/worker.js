@@ -73,7 +73,7 @@ async function handle(request,env){const url=new URL(request.url);const botRespo
    const claim=await env.DB.prepare('INSERT INTO task_claims (telegram_id,task,claim_day,created_at) VALUES (?,?,?,?) ON CONFLICT(telegram_id,task) DO NOTHING RETURNING telegram_id').bind(String(verified.user.id),task,day,Date.now()).first();
    if(!claim)return fail('Task reward already claimed',409);
    await env.DB.prepare('UPDATE users SET points=points+? WHERE telegram_id=?').bind(reward,String(verified.user.id)).run();
-   return json({user:await refreshed(env,await getUser(env,String(verified.user.id)),reward});
+   return json({user:await refreshed(env,await getUser(env,String(verified.user.id))),reward});
   }
   if(url.pathname==='/api/admin/settings'&&request.method==='POST'){
    verified=await auth(request,env,body);if(!isAdmin(env,verified.user.id))return fail('Admin access denied',403);
