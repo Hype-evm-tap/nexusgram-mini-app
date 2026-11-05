@@ -63,7 +63,7 @@ async function handle(request,env){const url=new URL(request.url);const botRespo
     const member=await fetch('https://api.telegram.org/bot'+env.BOT_TOKEN+'/getChatMember?chat_id=@'+encodeURIComponent(target)+'&user_id='+encodeURIComponent(String(verified.user.id)));
     const mj=await member.json();
     const status=mj?.result?.status;
-    if(!mj.ok||!['member','administrator','creator'].includes(status))return fail('Join the official Telegram channel first, then try Claim.',403);
+    const isMember=status==='member'||status==='administrator'||status==='creator'||(status==='restricted'&&mj?.result?.is_member===true);if(!mj.ok||!isMember)return fail('Join the official Telegram channel first, then try Claim.',403);
    }else{
     const started=Number(body.startedAt||0);
     if(!started||Date.now()-started<5000)return fail('Watch the YouTube task for at least 5 seconds before claiming.',403);
