@@ -21,12 +21,12 @@
     </header>
     <main>
       <section class="page active" id="page-mine">
-        <div class="phase-pill"><span class="pulse"></span><span class="phase-dot">●</span><span>PRE-TGE</span><span class="phase-live">LIVE</span></div>
+        <div class="phase-pill"><span class="status-dot"></span><span>PRE-TGE NETWORK</span><span class="phase-live">LIVE</span></div>
         <div class="balance-block"><div class="balance"><span id="balance">0</span><span class="unit">NXG</span></div><div class="subtle">Community points · pre-TGE</div></div>
         <div class="coin-stage"><button class="coin-button" id="tapButton" aria-label="Tap to mine"><img src="https://i.ibb.co/DfFShN7D/56093-removebg-preview.png" alt="NXG"/><span class="tap-ripple"></span></button><div id="floatLayer"></div></div>
         <div class="energy-card"><div class="energy-head"><span class="icon-label icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg></span><b id="energyText">1000 / 1000</b></div><div class="energy-track"><div id="energyFill" class="energy-fill"></div></div><div class="energy-foot"><span>Regenerates automatically</span><span id="regenText">+5 / sec</span></div></div>
         <div class="quick-stats"><div><span class="stat-icon icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></span><small>POWER</small><b id="tapPower">+1</b></div><div><span class="stat-icon icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2s1 5-2 8c-1.5-1.5-2-3-2-4-4 3-6 6-6 10a9 9 0 0018 0c0-4-2-7-5-10 0 2-1 3-3 4 1-4 0-6 0-8z"/></svg></span><small>STREAK</small><b id="streak">0 days</b></div><div><span class="stat-icon icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v4h3v2c0 3-2 5-5 6a4 4 0 01-2 2v2h4v2H7v-2h4v-2a4 4 0 01-2-2c-3-1-5-3-5-6V7h3V3zm-3 6c0 1.7 1 2.8 3 3.5V9H4zm16 0h-3v3.5c2-.7 3-1.8 3-3.5z"/></svg></span><small>RANK</small><b id="rank">Rookie</b></div></div>
-        <div class="banner-card"><div class="banner-icon">◈</div><div><b>NETWORK</b><p>Build your squad and unlock community bonuses.</p></div><button data-go="squad" aria-label="Open squad">→</button></div>
+        <div class="banner-card"><div class="banner-icon icon-svg"><svg viewBox="0 0 24 24"><path d="M12 3 4 7v10l8 4 8-4V7l-8-4Zm0 4 4 2-4 2-4-2 4-2Zm-6 5 5 2.5v5L6 17v-5Zm13 0v5l-5 2.5v-5L19 12Z"/></svg></div><div><b>NETWORK</b><p>Build your squad and unlock community bonuses.</p></div><button data-go="squad" aria-label="Open squad"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></span></button></div>
       </section>
       <section class="page" id="page-boost">
         <div class="page-heading"><div><span class="eyebrow">UPGRADE YOUR MINING</span><h1>Boost Lab</h1></div><div class="mini-balance icon-balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg><span id="boostBalance">0</span></div></div>
@@ -41,7 +41,27 @@
         <div class="section-title">YOUR NETWORK <span id="refTotal">0 invited</span></div><div class="list-card" id="refList"><div class="empty-state">Your squad is waiting. Invite your first friend!</div></div>
         <div class="info-note">Referral rewards are limited to genuine new Telegram accounts. Self-referrals and suspicious activity may be disqualified.</div>
       </section>
-      <section class="page" id="page-daily"><div class="page-heading"><div><span class="eyebrow">DAILY STREAK</span><h1>Daily Check-in</h1></div><div class="mini-balance" id="dailyPageStreak">0</div></div><div class="daily-hero"><div class="daily-icon icon-svg"><svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h2a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2h2V2zm-2 7v11h14V9H5zm3 3h3v3H8v-3zm5 0h3v3h-3v-3z"/></svg></div><div><b>Keep your streak alive</b><p>Check in every 24 hours and unlock bigger NXG rewards.</p></div></div><div class="daily-summary"><div><small>CURRENT STREAK</small><b id="dailyStreakValue">0 Days</b></div><div><small>TODAY REWARD</small><b id="dailyRewardValue">+50 NXG</b></div></div><div class="streak-panel"><div class="streak-panel-head"><div><span class="eyebrow">7-DAY REWARD CYCLE</span><p>Claim each day in sequence. Miss a day and the streak resets.</p></div><button class="primary-button" id="dailyPageClaim">Claim today</button></div><div class="streak-days" id="dailyPageDays"></div></div><div class="daily-next">Daily reward resets every 24 hours.</div></section><section class="page" id="page-tasks">
+      <section class="page" id="page-daily">
+  <div class="jvault-head">
+    <div><span class="eyebrow">NEXUS / DAILY PROTOCOL</span><h1>Daily</h1></div>
+    <div class="vault-chip"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 5v4.6l3.2 1.9-.9 1.5-4.3-2.6V7Z"/></svg></span><b id="dailyPageStreak">0</b></div>
+  </div>
+  <div class="daily-command">
+    <div class="command-top"><span class="status-dot"></span><span>STREAK PROTOCOL</span><span class="command-state" id="dailyState">READY</span></div>
+    <div class="command-main">
+      <div class="streak-orbit"><div class="orbit-ring"></div><div class="orbit-core"><span id="dailyStreakValue">0</span><small>DAYS</small></div></div>
+      <div class="command-copy"><span class="eyebrow">TODAY'S ALLOCATION</span><strong id="dailyRewardValue">+50 NXG</strong><p id="dailyNextText">Complete today's check-in to continue the cycle.</p></div>
+    </div>
+    <button class="vault-action" id="dailyPageClaim"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 19h14"/></svg></span><span id="dailyClaimLabel">CHECK IN</span></button>
+  </div>
+  <div class="cycle-header"><div><span class="eyebrow">7-DAY CYCLE</span><h2>Reward Matrix</h2></div><span class="cycle-meta">NXG POINTS</span></div>
+  <div class="reward-matrix" id="dailyPageDays"></div>
+  <div class="daily-stats">
+    <div class="data-cell"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M12 2l2.3 6.7L21 11l-6.7 2.3L12 20l-2.3-6.7L3 11l6.7-2.3L12 2Z"/></svg></span><small>NEXT</small><b id="dailyNextReward">+75 NXG</b></div>
+    <div class="data-cell"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M6 3h12v4h3v2c0 3-2 5-5 6a4 4 0 0 1-2 2v2h4v2H6v-2h4v-2a4 4 0 0 1-2-2c-3-1-5-3-5-6V7h3V3Z"/></svg></span><small>PEAK</small><b>+500 NXG</b></div>
+  </div>
+  <div class="daily-note"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M12 2 3 6v5c0 5.2 3.7 9.5 9 11 5.3-1.5 9-5.8 9-11V6l-9-4Zm0 5 5 2v2c0 3.4-2.2 6.2-5 7.4C9.2 17.2 7 14.4 7 11V9l5-2Z"/></svg></span><span>Missed day resets the active cycle. One claim per 24-hour period.</span></div>
+</section><section class="page" id="page-tasks">
         <div class="page-heading"><div><span class="eyebrow">EARN COMMUNITY POINTS</span><h1>Daily Missions</h1></div><div class="mini-balance icon-balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg><span id="taskBalance">0</span></div></div>
         
         <div class="section-title">OFFICIAL COMMUNITY <span>Stay connected</span></div>
@@ -84,14 +104,14 @@
   </div>
   <button class="primary-button admin-save" id="adminSave">Save all changes</button>
   <div class="info-note">Owner-only controls. Changes are saved server-side and apply to the whole app without changing user balances.</div>
-</section></main><div class="streak-modal" id="streakModal" aria-hidden="true"><div class="streak-sheet"><button class="streak-close" id="streakClose">×</button><span class="eyebrow">7-DAY STREAK</span><h2>Daily Check-in</h2><p>Keep your streak alive and unlock bigger NXG rewards.</p><div class="streak-days" id="streakDays"></div><button class="primary-button" id="streakClaim">Claim today</button></div></div>
+</section></main>
     
 
     <nav class="bottom-nav" aria-label="Main navigation">
       <button class="nav-item active" data-page="mine" aria-label="Mine"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3l-5 5 3 3-6 6 2 2 6-6 3 3 5-5-8-8z"/></svg></span></button>
       <button class="nav-item" data-page="boost" aria-label="Boost"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2z"/></svg></span></button>
       <button class="nav-item" data-page="squad" aria-label="Squad"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 11a4 4 0 110-8 4 4 0 010 8zm8-1a3 3 0 100-6 3 3 0 000 6zM2 20a6 6 0 0112 0v1H2v-1zm13 1v-1a6.5 6.5 0 00-2-4.7A5 5 0 0119 20v1h-4z"/></svg></span></button>
-      <button class="nav-item" data-page="daily" aria-label="Daily check-in"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h2a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2h2V2zm-2 7v11h14V9H5zm3 3h3v3H8v-3zm5 0h3v3h-3v-3z"/></svg></span></button><button class="nav-item" data-page="tasks" aria-label="Tasks"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg></span></button>
+      <button class="nav-item" data-page="daily" aria-label="Daily"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V2Zm-2 7v11h14V9H5Zm3 3h3v3H8v-3Zm5 0h3v3h-3v-3Z"/></svg></span></button><button class="nav-item" data-page="tasks" aria-label="Tasks"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg></span></button>
       <button class="nav-item" data-page="leaderboard" aria-label="Leaderboard"><span class="icon-svg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v4h3v2c0 3-2 5-5 6a4 4 0 01-2 2v2h4v2H7v-2h4v-2a4 4 0 01-2-2c-3-1-5-3-5-6V7h3V3zm-3 6c0 1.7 1 2.8 3 3.5V9H4zm16 0h-3v3.5c2-.7 3-1.8 3-3.5z"/></svg></span></button>
     <button class="nav-item admin-nav" data-page="admin" aria-label="Admin"><span class="icon-svg"><svg viewBox="0 0 24 24"><path d="M12 2l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7L12 2z"/></svg></span></button></nav>
     <div class="toast" id="toast" role="status"></div>
