@@ -209,8 +209,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
    const day=indiaDay(Date.now());
    const claimTask=dynamicLink?'link:'+String(dynamicLink.id):task;
    const reward=Math.max(0,Math.min(100000,Number(dynamicLink?.reward??await readAdminSetting(env,task==='news'?'telegram_task_reward':'youtube_task_reward','25'))));
-   try{const legacy=await env.DB.prepare('SELECT telegram_id FROM task_claims WHERE telegram_id=? AND task=? AND claim_day=? LIMIT 1').bind(String(verified.user.id),claimTask,day).first();if(legacy)return fail('Task reward already claimed',409);}catch{}
-   const claim=await env.DB.prepare('INSERT INTO task_claims_v2 (telegram_id,task,claim_day,created_at) VALUES (?,?,?,?) ON CONFLICT(telegram_id,task,claim_day) DO NOTHING RETURNING telegram_id').bind(String(verified.user.id),claimTask,day,Date.now()).first();
+   const claim=await env.DB.prepare('INSERT INTO task_claims_v3 (telegram_id,task,created_at) VALUES (?,?,?) ON CONFLICT(telegram_id,task) DO NOTHING RETURNING telegram_id').bind(String(verified.user.id),claimTask,Date.now()).first();
    if(!claim)return fail('Task reward already claimed',409);
    await env.DB.prepare('UPDATE users SET points=points+? WHERE telegram_id=?').bind(reward,String(verified.user.id)).run();await activateReferralIfEligible(env,String(verified.user.id));
    return json({user:await refreshed(env,await getUser(env,String(verified.user.id))),reward});
