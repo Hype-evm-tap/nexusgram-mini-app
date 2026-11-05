@@ -17,12 +17,24 @@ async function hmac(keyBytes, message){ const key=await crypto.subtle.importKey(
 function hex(bytes){return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('')}
 function safeEqual(a,b){if(a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
 async function verifyInitData(initData,botToken){
+  initData=String(initData||'').trim();
+  botToken=String(botToken||'').trim();
   if(!initData||!botToken)throw new Error('Telegram sign-in is not configured');
-  const params=new URLSearchParams(initData);const received=params.get('hash');if(!received)throw new Error('Invalid Telegram launch data');params.delete('hash');
-  const authDate=Number(params.get('auth_date')||0);if(!authDate||Math.floor(Date.now()/1000)-authDate>MAX_INIT_AGE)throw new Error('Telegram session expired. Reopen the Mini App.');
-  params.sort();const check=[...params.entries()].map(([k,v])=>k+'='+v).join('\n');
-  const secret=await hmac(new TextEncoder().encode(botToken),'WebAppData');const expected=hex(await hmac(secret,check));if(!safeEqual(expected,received))throw new Error('Telegram signature verification failed');
-  const user=JSON.parse(params.get('user')||'{}');if(!user.id)throw new Error('Telegram user missing');return {user,startParam:params.get('start_param')||''};
+  const params=new URLSearchParams(initData);
+  const received=String(params.get('hash')||'').trim().toLowerCase();
+  if(!received)throw new Error('Invalid Telegram launch data');
+  params.delete('hash');
+  const authDate=Number(params.get('auth_date')||0);
+  if(!authDate||Math.floor(Date.now()/1000)-authDate>MAX_INIT_AGE)throw new Error('Telegram session expired. Reopen the Mini App.');
+  params.sort();
+  const check=[...params.entries()].map(([k,v])=>k+'='+v).join('\n');
+  const secret=await hmac(new TextEncoder().encode(botToken),'WebAppData');
+  const expected=hex(await hmac(secret,check));
+  if(!safeEqual(expected,received))throw new Error('Telegram signature verification failed');
+  let user;
+  try{user=JSON.parse(params.get('user')||'{}')}catch{throw new Error('Invalid Telegram user data')}
+  if(!user.id)throw new Error('Telegram user missing');
+  return {user,startParam:params.get('start_param')||''};
 }
 function energyState(row,now,depletedAt){const max=Number(row.max_energy||START_ENERGY);const current=Math.max(0,Number(row.energy||0));if(current<=0){const anchor=Number(depletedAt||now);const readyAt=anchor+REGEN_INTERVAL_MS;if(now>=readyAt)return {energy:max,max,regen:0,ticks:0,nextRegenAt:0,ready:true};return {energy:0,max,regen:0,ticks:0,nextRegenAt:readyAt,ready:false};}return {energy:Math.min(max,current),max,regen:0,ticks:0,nextRegenAt:0,ready:false}}
 function rankFromPoints(p){return p>=300000?'Grandmaster':p>=150000?'Master':p>=75000?'Diamond':p>=35000?'Platinum':p>=15000?'Gold':p>=5000?'Silver':p>=1000?'Bronze':'Rookie';}
