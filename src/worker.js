@@ -37,7 +37,7 @@ async function verifyInitData(initData,botToken){
   const check=[...params.entries()].map(([k,v])=>k+'='+v).join('\n');
   const secret=await hmac(new TextEncoder().encode(botToken),'WebAppData');
   const expected=hex(await hmac(secret,check));
-  if(!safeEqual(expected,received))throw new Error('Telegram signature verification failed');
+  if(!safeEqual(expected,received)){try{const check=await fetch('https://api.telegram.org/bot'+normalizeBotToken(botToken)+'/getMe');const td=await check.json().catch(()=>({}));if(td.ok&&td.result?.username){throw new Error('Telegram signature mismatch. Worker BOT_TOKEN belongs to @'+String(td.result.username)+'; the Mini App must be launched from that same bot.')}if(td.description==='Not Found')throw new Error('Telegram BOT_TOKEN is invalid or revoked. Replace the BOT_TOKEN secret with the token of @Nexusgram_official_bot.');}catch(e){if(String(e?.message||'').startsWith('Telegram signature mismatch')||String(e?.message||'').startsWith('Telegram BOT_TOKEN'))throw e;}throw new Error('Telegram signature verification failed');}
   let user;
   try{user=JSON.parse(params.get('user')||'{}')}catch{throw new Error('Invalid Telegram user data')}
   if(!user.id)throw new Error('Telegram user missing');
