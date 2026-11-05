@@ -15,6 +15,17 @@ function json(data, status=200){ return new Response(JSON.stringify(data), {stat
 function fail(message,status=400){ return json({error:message},status); }
 async function hmac(keyBytes, message){ const key=await crypto.subtle.importKey('raw',keyBytes,{name:'HMAC',hash:'SHA-256'},false,['sign']); return new Uint8Array(await crypto.subtle.sign('HMAC',key,new TextEncoder().encode(message))); }
 function hex(bytes){return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('')}
+function b64urlBytes(value){const s=String(value||'').replace(/-/g,'+').replace(/_/g,'/');const pad=s.length%4?s+'='.repeat(4-s.length%4):s;const bin=atob(pad);const out=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)out[i]=bin.charCodeAt(i);return out}
+async function verifyTelegramSignature(params,botId){
+  const sig=String(params.get('signature')||'').trim();
+  if(!sig||!botId)return false;
+  params.delete('signature');params.delete('hash');
+  params.sort();
+  const data=String(botId)+':WebAppData\n'+[...params.entries()].map(([k,v])=>k+'='+v).join('\n');
+  const key=await crypto.subtle.importKey('raw',hexBytes('e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d'),{name:'Ed25519'},false,['verify']);
+  return crypto.subtle.verify({name:'Ed25519'},key,b64urlBytes(sig),new TextEncoder().encode(data));
+}
+function hexBytes(hexString){const out=new Uint8Array(hexString.length/2);for(let i=0;i<out.length;i++)out[i]=parseInt(hexString.slice(i*2,i*2+2),16);return out}
 function safeEqual(a,b){if(a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
 function normalizeBotToken(value){
   let token=String(value||'').trim().replace(/^['"]|['"]$/g,'').replace(/^Bearer\s+/i,'').trim();
@@ -37,7 +48,19 @@ async function verifyInitData(initData,botToken){
   const check=[...params.entries()].map(([k,v])=>k+'='+v).join('\n');
   const secret=await hmac(new TextEncoder().encode(botToken),'WebAppData');
   const expected=hex(await hmac(secret,check));
-  if(!safeEqual(expected,received)){try{const check=await fetch('https://api.telegram.org/bot'+normalizeBotToken(botToken)+'/getMe');const td=await check.json().catch(()=>({}));if(td.ok&&td.result?.username){throw new Error('Telegram signature mismatch. Worker BOT_TOKEN belongs to @'+String(td.result.username)+'; the Mini App must be launched from that same bot.')}if(td.description==='Not Found')throw new Error('Telegram BOT_TOKEN is invalid or revoked. Replace the BOT_TOKEN secret with the token of @Nexusgram_official_bot.');}catch(e){if(String(e?.message||'').startsWith('Telegram signature mismatch')||String(e?.message||'').startsWith('Telegram BOT_TOKEN'))throw e;}throw new Error('Telegram signature verification failed');}
+  if(!safeEqual(expected,received)){
+  try{
+    const check=await fetch('https://api.telegram.org/bot'+normalizeBotToken(botToken)+'/getMe');
+    const td=await check.json().catch(()=>({}));
+    if(td.ok&&td.result?.id){
+      try{if(await verifyTelegramSignature(new URLSearchParams(initData),td.result.id)){}else throw new Error('ed25519 failed');}
+      catch(e){if(String(e?.message||'')!=='ed25519 failed')throw e;
+        throw new Error('Telegram signature mismatch. Worker BOT_TOKEN is valid for @'+String(td.result?.username||'unknown')+', but Telegram hash/signature validation failed. Reopen the Mini App from @Nexusgram_official_bot.');
+      }
+    }else if(td.description==='Not Found')throw new Error('Telegram BOT_TOKEN is invalid or revoked. Replace the BOT_TOKEN secret with the token of @Nexusgram_official_bot.');
+  }catch(e){if(String(e?.message||'').startsWith('Telegram signature mismatch')||String(e?.message||'').startsWith('Telegram BOT_TOKEN'))throw e;}
+  throw new Error('Telegram signature verification failed');
+}
   let user;
   try{user=JSON.parse(params.get('user')||'{}')}catch{throw new Error('Invalid Telegram user data')}
   if(!user.id)throw new Error('Telegram user missing');
