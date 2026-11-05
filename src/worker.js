@@ -20,7 +20,7 @@ async function verifyInitData(initData,botToken){
   if(!initData||!botToken)throw new Error('Telegram sign-in is not configured');
   const params=new URLSearchParams(initData);const received=params.get('hash');if(!received)throw new Error('Invalid Telegram launch data');params.delete('hash');
   const authDate=Number(params.get('auth_date')||0);if(!authDate||Math.floor(Date.now()/1000)-authDate>MAX_INIT_AGE)throw new Error('Telegram session expired. Reopen the Mini App.');
-  params.sort();const check=[...params.entries()].map(([k,v])=>`${k}=${v}`).join('\\n');
+  params.sort();const check=[...params.entries()].map(([k,v])=>\`\${k}=\${v}\`).join('\n');
   const secret=await hmac(new TextEncoder().encode('WebAppData'),botToken);const expected=hex(await hmac(secret,check));if(!safeEqual(expected,received))throw new Error('Telegram signature verification failed');
   const user=JSON.parse(params.get('user')||'{}');if(!user.id)throw new Error('Telegram user missing');return {user,startParam:params.get('start_param')||''};
 }
