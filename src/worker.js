@@ -66,10 +66,17 @@ async function handle(request,env){const url=new URL(request.url);const botRespo
    if(task==='news'){
     const target=(env.NEWS_URL||'').match(/^https:\/\/t\.me\/([^/?#]+)/i)?.[1];
     if(!target)return fail('Telegram channel is not configured',400);
-    const member=await fetch('https://api.telegram.org/bot'+env.BOT_TOKEN+'/getChatMember?chat_id=@'+encodeURIComponent(target)+'&user_id='+encodeURIComponent(String(verified.user.id)));
-    const mj=await member.json();
-    const status=mj?.result?.status;
-    const isMember=status==='member'||status==='administrator'||status==='creator'||(status==='restricted'&&mj?.result?.is_member===true);if(!mj.ok||!isMember)return fail('Join the official Telegram channel first, then try Claim.',403);
+    const tgUrl='https://api.telegram.org/bot'+env.BOT_TOKEN+'/getChatMember?chat_id=@'+encodeURIComponent(target)+'&user_id='+encodeURIComponent(String(verified.user.id));
+    const member=await fetch(tgUrl);
+    const mj=await member.json().catch(()=>({ok:false}));
+    if(!mj.ok){
+      const desc=String(mj.description||'');
+      if(/not enough rights|administrator|chat not found|bot is not a member/i.test(desc))return fail('Telegram verification is unavailable. Make sure the NexusGram bot is an administrator in the official channel.',503);
+      return fail('Telegram membership could not be verified. Please try again.',503);
+    }
+    const status=String(mj?.result?.status||'');
+    const isMember=status==='member'||status==='administrator'||status==='creator'||(status==='restricted'&&mj?.result?.is_member===true);
+    if(!isMember)return fail('You have not joined the official NexusGram channel. Join it first, then tap Claim again.',403);
    }else{
     const started=Number(body.startedAt||0);
     if(!started||Date.now()-started<5000)return fail('Watch the YouTube task for at least 5 seconds before claiming.',403);
