@@ -56,7 +56,11 @@ async function handle(request,env){const url=new URL(request.url);const botRespo
    const now=Date.now(),id=String(verified.user.id);
    const tapReward=Math.max(0,Math.min(100,Number(await readAdminSetting(env,'tap_reward','1'))));
    const energyCost=Math.max(1,Math.min(100,Number(await readAdminSetting(env,'energy_cost','10'))));
-   const updated=await env.DB.prepare('UPDATE users SET points=points+((?+multitap_level)*?),energy=energy-(?*?),updated_at=CASE WHEN energy-(?*?)<=0 THEN ? ELSE updated_at END WHERE telegram_id=? AND energy>=(?*?) RETURNING telegram_id').bind(tapReward,count,energyCost,count,energyCost,count,now,id,energyCost,count).first();
+   const available=Math.max(0,Number(readyUser.energy||0));
+   if(available<=0)return fail('Not enough energy',409);
+   const actualCount=Math.min(count,Math.max(1,Math.ceil(available/energyCost)));
+   const charge=Math.min(available,actualCount*energyCost);
+   const updated=await env.DB.prepare('UPDATE users SET points=points+((?+multitap_level)*?),energy=MAX(0,energy-?),updated_at=CASE WHEN MAX(0,energy-?)<=0 THEN ? ELSE updated_at END WHERE telegram_id=? AND energy>0 RETURNING telegram_id').bind(tapReward,actualCount,charge,charge,now,id).first();
    if(!updated)return fail('Not enough energy',409);
    const row=await getUser(env,id);
    await activateReferralIfEligible(env,id);return json({user:await refreshed(env,await getUser(env,id))});
