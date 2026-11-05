@@ -17,7 +17,11 @@ async function hmac(keyBytes, message){ const key=await crypto.subtle.importKey(
 function hex(bytes){return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('')}
 function safeEqual(a,b){if(a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
 function normalizeBotToken(value){
-  return String(value||'').trim().replace(/^Bearer\\s+/i,'').replace(/^['"]|['"]$/g,'');
+  let token=String(value||'').trim().replace(/^['"]|['"]$/g,'').replace(/^Bearer\\s+/i,'').trim();
+  const m=token.match(/api\\.telegram\\.org\\/bot([^/\\s]+)/i);
+  if(m)token=m[1];
+  token=token.replace(/^bot/i,'').replace(/\\s+/g,'');
+  return token.trim();
 }
 async function verifyInitData(initData,botToken){
   initData=String(initData||'').trim();
@@ -63,7 +67,7 @@ async function listLinks(env,includeDisabled=false){await ensureLinksTable(env);
 async function handle(request,env){const url=new URL(request.url);const botResponse=await handleTelegramRequest(request,env,url);if(botResponse)return botResponse;if(request.method==='OPTIONS')return new Response(null,{headers:{'access-control-allow-origin':'*','access-control-allow-methods':'GET,POST,OPTIONS','access-control-allow-headers':'content-type'}});if(url.pathname==='/health')return json({ok:true,service:'nexusgram-api'});
 if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
   try{
-    const r=await fetch('https://api.telegram.org/bot'+String(env.BOT_TOKEN||'').trim()+'/getMe');
+    const r=await fetch('https://api.telegram.org/bot'+normalizeBotToken(env.BOT_TOKEN)+'/getMe');
     const d=await r.json().catch(()=>({}));
     return json({ok:!!d.ok,bot:d.ok?{id:d.result.id,username:d.result.username,firstName:d.result.first_name}:null,telegramError:d.ok?null:(d.description||'Telegram rejected BOT_TOKEN')});
   }catch(e){return json({ok:false,bot:null,telegramError:'Telegram API request failed'},502)}
@@ -100,7 +104,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
    if((task==='news')||(dynamicLink&&dynamicLink.type==='telegram')){
     const target=(dynamicLink?String(dynamicLink.url):String(env.NEWS_URL||'https://t.me/nexusgram_official')).match(/^https:\/\/t\.me\/([^/?#]+)/i)?.[1];
     if(!target)return fail('Telegram channel is not configured',400);
-    const tgUrl='https://api.telegram.org/bot'+env.BOT_TOKEN+'/getChatMember?chat_id=@'+encodeURIComponent(target)+'&user_id='+encodeURIComponent(String(verified.user.id));
+    const tgUrl='https://api.telegram.org/bot'+normalizeBotToken(env.BOT_TOKEN)+'/getChatMember?chat_id=@'+encodeURIComponent(target)+'&user_id='+encodeURIComponent(String(verified.user.id));
     const member=await fetch(tgUrl);const mj=await member.json().catch(()=>({ok:false}));
     if(!mj.ok){const desc=String(mj.description||'');if(/not enough rights|administrator|chat not found|bot is not a member/i.test(desc))return fail('Telegram verification is unavailable. Make sure the NexusGram bot is an administrator in the official channel.',503);return fail('Telegram membership could not be verified. Please try again.',503);}
     const status=String(mj?.result?.status||'');const isMember=status==='member'||status==='administrator'||status==='creator'||(status==='restricted'&&mj?.result?.is_member===true);
