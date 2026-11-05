@@ -17,10 +17,10 @@ async function hmac(keyBytes, message){ const key=await crypto.subtle.importKey(
 function hex(bytes){return [...bytes].map(b=>b.toString(16).padStart(2,'0')).join('')}
 function safeEqual(a,b){if(a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0}
 function normalizeBotToken(value){
-  let token=String(value||'').trim().replace(/^['"]|['"]$/g,'').replace(/^Bearer\\s+/i,'').trim();
-  const m=token.match(/api\\.telegram\\.org\\/bot([^/\\s]+)/i);
+  let token=String(value||'').trim().replace(/^['"]|['"]$/g,'').replace(/^Bearer\s+/i,'').trim();
+  const m=token.match(/api\.telegram\.org\/bot([^/\s]+)/i);
   if(m)token=m[1];
-  token=token.replace(/^bot/i,'').replace(/\\s+/g,'');
+  token=token.replace(/^bot/i,'').replace(/\s+/g,'');
   return token.trim();
 }
 async function verifyInitData(initData,botToken){
