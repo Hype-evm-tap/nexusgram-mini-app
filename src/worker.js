@@ -22,8 +22,6 @@ async function verifyTelegramSignature(params,botId){
   params.delete('signature');params.delete('hash');
   params.sort();
   const data=String(botId)+':WebAppData\\n'+[...params.entries()].map(([k,v])=>k+'='+v).join('\\n');
-'+[...params.entries()].map(([k,v])=>k+'='+v).join('
-');
   const key=await crypto.subtle.importKey('raw',hexBytes('e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d'),{name:'Ed25519'},false,['verify']);
   return crypto.subtle.verify({name:'Ed25519'},key,b64urlBytes(sig),new TextEncoder().encode(data));
 }
