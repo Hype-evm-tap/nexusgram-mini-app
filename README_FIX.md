@@ -55,3 +55,19 @@ Optional: pass `telegram_id` in postback, or use `ymid` format `nxg-{telegramId}
 ```
 curl "https://nexusgram-mini-app.rajtilakbbu1.workers.dev/api/monetag/postback?secret=SECRET&ymid=nxg-123456789-test1&event_type=click&reward_event_type=valued&zone_id=1&sub_zone_id=1&request_var=test&estimated_price=0.01&telegram_id=123456789"
 ```
+
+## UI Polish (2026-11-08) — Rewarded Ads section
+
+- Completely redesigned **Watch & Earn** card: reward highlight, daily progress bar, cleaner CTA.
+- Professional empty / error states for **Ad Reward History** with SVG icons.
+- When Monetag SDK is not loaded (`show_12178167` missing), the card switches to an error state with warning icon + clear message instead of only a toast.
+- History refresh is now a compact icon button in the section header.
+- Progress bar updates from `/api/ad-history` count (used / 1000).
+
+**Important:** Ensure the Monetag SDK script tag is present in the HTML `<head>` (from your Monetag dashboard), e.g.:
+
+```html
+<script src="https://YOUR-MONETAG-DOMAIN/sdk.js" data-zone="12178167" data-sdk="show_12178167"></script>
+```
+
+Without it, the "Ad network not ready" state will appear.
