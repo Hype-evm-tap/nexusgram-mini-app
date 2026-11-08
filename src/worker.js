@@ -21,7 +21,7 @@ async function verifyTelegramSignature(params,botId){
   if(!sig||!botId)return false;
   params.delete('signature');params.delete('hash');
   params.sort();
-  const data=String(botId)+':WebAppData\\n'+[...params.entries()].map(([k,v])=>k+'='+v).join('\\n');
+  const data=String(botId)+':WebAppData\n'+[...params.entries()].map(([k,v])=>k+'='+v).join('\n');
   const key=await crypto.subtle.importKey('raw',hexBytes('e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d'),{name:'Ed25519'},false,['verify']);
   return crypto.subtle.verify({name:'Ed25519'},key,b64urlBytes(sig),new TextEncoder().encode(data));
 }
@@ -47,7 +47,7 @@ async function verifyInitData(initData,botToken){
   const authDate=Number(params.get('auth_date')||0);
   if(!authDate||Math.floor(Date.now()/1000)-authDate>MAX_INIT_AGE)throw new Error('Telegram session expired. Reopen the Mini App.');
   params.sort();
-  const check=[...params.entries()].map(([k,v])=>k+'='+v).join('\\n');
+  const check=[...params.entries()].map(([k,v])=>k+'='+v).join('\n');
   // Correct order per Telegram docs: secret = HMAC-SHA256(key="WebAppData", message=bot_token)
   const secret=await hmac(new TextEncoder().encode('WebAppData'), botToken);
   const expected=hex(await hmac(secret, check));
