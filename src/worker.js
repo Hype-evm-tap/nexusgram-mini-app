@@ -111,7 +111,7 @@ async function activateReferralIfEligible(env,id){
  ]);
 }
 function isAdmin(env,id){return (env.ADMIN_IDS||'').split(',').map(x=>x.trim()).filter(Boolean).includes(String(id))}
-async function ensureLinksTable(env){await env.DB.prepare('CREATE TABLE IF NOT EXISTS admin_links (id INTEGER PRIMARY KEY AUTOINCREMENT,type TEXT NOT NULL,title TEXT NOT NULL,url TEXT NOT NULL,reward INTEGER NOT NULL DEFAULT 0,description TEXT NOT NULL DEFAULT '',enabled INTEGER NOT NULL DEFAULT 1,created_at INTEGER NOT NULL,updated_at INTEGER NOT NULL)').run()}
+async function ensureLinksTable(env){await env.DB.prepare("CREATE TABLE IF NOT EXISTS admin_links (id INTEGER PRIMARY KEY AUTOINCREMENT,type TEXT NOT NULL,title TEXT NOT NULL,url TEXT NOT NULL,reward INTEGER NOT NULL DEFAULT 0,description TEXT NOT NULL DEFAULT '',enabled INTEGER NOT NULL DEFAULT 1,created_at INTEGER NOT NULL,updated_at INTEGER NOT NULL)").run()}
 function linkSafe(row){return {id:Number(row.id),type:String(row.type||'other'),title:String(row.title||'Community Link'),url:String(row.url||''),reward:Number(row.reward||0),description:String(row.description||''),enabled:Number(row.enabled||0)}}
 async function listLinks(env,includeDisabled=false){await ensureLinksTable(env);const q=includeDisabled?'SELECT * FROM admin_links ORDER BY id DESC':'SELECT * FROM admin_links WHERE enabled=1 ORDER BY id DESC';const r=await env.DB.prepare(q).all();return (r.results||[]).map(linkSafe)}
 
