@@ -160,7 +160,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
    if(Number(dayCount?.n||0)>=limit)return fail('Daily ad reward limit reached',409);
    const claimId='ag-'+userId+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,10);
    const claim=await env.DB.prepare('INSERT INTO ad_claims (claim_id,telegram_id,claim_day,created_at) VALUES (?,?,?,?)').bind(claimId,userId,day,Date.now()).run();
-   const reward=Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'ad_reward','25'))));
+   const reward=100;
    await env.DB.prepare('UPDATE users SET points=points+? WHERE telegram_id=?').bind(reward,userId).run();
    await activateReferralIfEligible(env,userId);
    return json({ok:true,reward,telegramId:userId,claimId});
