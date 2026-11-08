@@ -150,8 +150,25 @@ TON_API_KEY=<toncenter key>
 ```
 
 
-## UI fix (2026-11-08 — username / overlap)
+## Critical UI fix (2026-11-08)
 
-- **Username not showing:** profile pill had a redundant person icon next to the avatar, which squeezed the name off-screen on narrow Telegram viewports. Removed extra icon; username (first name, or `@username` fallback) now uses ellipsis and stays visible.
-- **Texts hide / overlap:** tightened topbar flex (`min-width:0`, gap), `overflow-x:hidden` on shell instead of clipping everything, larger nav labels (readable on small screens), fixed mojibake (`Â·` / broken arrows) in embedded HTML/JS.
-- Header shows first name (or @username if no first name); profile page still shows full details.
+### Root cause of white boxes / broken bottom nav / visible `\n`
+The embedded `EMBEDDED_APP_HTML` string was **partially double-escaped** from the admin panel section onward (`style=\"..."`, `\n` as text). Browsers treated attributes as broken → bottom nav and lower UI rendered as blank/white blocks, and literal `\n` could appear on screen.
+
+### What was fixed
+1. Unescaped the corrupted HTML region (proper quotes + real newlines).
+2. Profile pill: removed redundant person icon so **username stays visible**; ellipsis for long names.
+3. Topbar/brand flex so nothing gets clipped off-screen.
+4. Bottom nav forced dark background (`#030b12`) so it never turns white.
+5. Nav labels slightly larger for readability.
+6. Header shows first name, or `@username` if first name is empty.
+7. Mojibake characters cleaned (`Â·` → `·`, etc.).
+
+### Deploy
+```bash
+cd nexusgram-mini-app-main
+npm install
+npx wrangler deploy
+```
+
+After deploy: fully close the Mini App in Telegram and reopen (or clear cache) so new HTML/CSS/JS load.
