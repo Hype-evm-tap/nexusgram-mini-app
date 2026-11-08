@@ -47,8 +47,7 @@ async function verifyInitData(initData,botToken){
   const authDate=Number(params.get('auth_date')||0);
   if(!authDate||Math.floor(Date.now()/1000)-authDate>MAX_INIT_AGE)throw new Error('Telegram session expired. Reopen the Mini App.');
   params.sort();
-  const check=[...params.entries()].map(([k,v])=>k+'='+v).join('
-');
+  const check=[...params.entries()].map(([k,v])=>k+'='+v).join('\\n');
   // Correct order per Telegram docs: secret = HMAC-SHA256(key="WebAppData", message=bot_token)
   const secret=await hmac(new TextEncoder().encode('WebAppData'), botToken);
   const expected=hex(await hmac(secret, check));
