@@ -357,7 +357,8 @@ if(url.pathname==='/api/ad-reward'&&request.method==='POST'){verified=await auth
     return fail(msg,status);
   }
  }
- if(url.pathname==='/tonconnect-manifest.json') return new Response(JSON.stringify({url:new URL(request.url).origin,name:'NexusGram',iconUrl:new URL('/logo.png',request.url).href}),{headers:{'content-type':'application/json; charset=utf-8','cache-control':'public, max-age=3600'}});\n if(url.pathname==='/'||url.pathname==='/index.html') return new Response(EMBEDDED_APP_HTML,{headers:{'content-type':'text/html; charset=utf-8','cache-control':'public, max-age=60'}});
+ if(url.pathname==='/tonconnect-manifest.json') return new Response(JSON.stringify({url:new URL(request.url).origin,name:'NexusGram',iconUrl:new URL('/logo.png',request.url).href}),{headers:{'content-type':'application/json; charset=utf-8','cache-control':'public, max-age=3600'}});
+ if(url.pathname==='/'||url.pathname==='/index.html') return new Response(EMBEDDED_APP_HTML,{headers:{'content-type':'text/html; charset=utf-8','cache-control':'public, max-age=60'}});
  if(url.pathname==='/app.js') return new Response(EMBEDDED_APP_JS,{headers:{'content-type':'application/javascript; charset=utf-8','cache-control':'public, max-age=300'}});
  if(url.pathname==='/app.css') return new Response(EMBEDDED_APP_CSS,{headers:{'content-type':'text/css; charset=utf-8','cache-control':'public, max-age=300'}});
  if(env.ASSETS)return env.ASSETS.fetch(request);
