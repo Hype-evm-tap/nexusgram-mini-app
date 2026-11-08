@@ -334,7 +334,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
    if(!allowed.has(key))return fail('Unknown admin setting');
    if(['mining_enabled','ads_enabled','maintenance_mode'].includes(key)&&!['0','1'].includes(value))return fail('Switch must be 0 or 1');
    if(['news_url','chat_url','youtube_url'].includes(key)&&value&&!/^https:\/\//i.test(value))return fail('URL must start with https://');
-   if(['tap_reward','energy_cost','daily_bonus','referral_bonus','ad_reward','telegram_task_reward','youtube_task_reward','redeem_reward','multitap_base_cost','energy_base_cost','recharge_base_cost'].includes(key)&&(!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(value)||!Number.isFinite(Number(value))||Number(value)<0))return fail('Enter a valid non-negative number');
+   if(['tap_reward','energy_cost','daily_bonus','referral_bonus','ad_reward','telegram_task_reward','youtube_task_reward','redeem_reward','multitap_base_cost','energy_base_cost','recharge_base_cost'].includes(key)&&!Number.isFinite(Number(value||'0')))return fail('Enter a valid number');
    await env.DB.prepare('INSERT INTO admin_settings(key,value,updated_at,updated_by) VALUES(?,?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at,updated_by=excluded.updated_by').bind(key,value,Date.now(),String(verified.user.id)).run();
    return json({ok:true,key,value});
   }
