@@ -104,7 +104,7 @@ async function refreshed(env,row){const now=Date.now();await env.DB.prepare('CRE
 async function activateReferralIfEligible(env,id){
  const row=await getUser(env,id);
  if(!row||Number(row.points||0)<500)return;
- const referralBonus=Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'referral_bonus','250'))));
+ const referralBonus=Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'referral_bonus','500'))));
  await env.DB.batch([
   env.DB.prepare('UPDATE users SET points=points+? WHERE telegram_id=(SELECT inviter_id FROM referrals WHERE invitee_id=? AND active=0 AND bonus_awarded=0)').bind(referralBonus,id),
   env.DB.prepare('UPDATE referrals SET active=1,bonus_awarded=1 WHERE invitee_id=? AND active=0 AND bonus_awarded=0').bind(id)
@@ -242,6 +242,8 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
    await env.DB.prepare("CREATE UNIQUE INDEX IF NOT EXISTS idx_withdrawal_one_open_per_user ON withdrawal_requests(telegram_id) WHERE status IN ('pending','approved')").run();
    const existing=await env.DB.prepare("SELECT id FROM withdrawal_requests WHERE telegram_id=? AND status IN ('pending','approved') LIMIT 1").bind(userId).first();
    if(existing)return fail('You already have an open withdrawal request',409);
+   const qualifiedRefs=await env.DB.prepare('SELECT COUNT(*) AS n FROM referrals WHERE inviter_id=? AND active=1').bind(userId).first();
+   if(Number(qualifiedRefs?.n||0)<10)return fail('Withdrawal locked: you need 10 active referrals. Current: '+Number(qualifiedRefs?.n||0)+'/10',403);
    const debit=await env.DB.prepare('UPDATE users SET points=points-?,updated_at=? WHERE telegram_id=? AND points>=? RETURNING points').bind(points,Date.now(),userId,points).first();
    if(!debit)return fail('Not enough NXG points',409);
    try{
@@ -249,7 +251,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
     return json({ok:true,id:ins.id,pointsReserved:points,nxgAmount:points/10,user:await refreshed(env,await getUser(env,userId))});
    }catch(err){await env.DB.prepare('UPDATE users SET points=points+?,updated_at=? WHERE telegram_id=?').bind(points,Date.now(),userId).run();if(String(err.message||'').includes('UNIQUE'))return fail('You already have an open withdrawal request',409);throw err;}
   }
-  if(url.pathname==='/api/session'&&request.method==='POST'){verified=await auth(request,env,body);if((await readAdminSetting(env,'maintenance_mode','0'))==='1'&&!isAdmin(env,verified.user.id))return fail('NexusGram is temporarily under maintenance',503);verified.startParam=String(verified.startParam||body.startParam||url.searchParams.get('startapp')||'');const row=await ensureUser(env,verified);const user=await refreshed(env,row);return json({user,config:{botUsername:(env.BOT_USERNAME||'Nexusgram_official_bot').replace(/^@/,'').trim(),dailyBase:Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'daily_bonus','50')))),referralBonus:Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'referral_bonus','250')))),newsUrl:env.NEWS_URL||'https://t.me/nexusgram_official',chatUrl:env.CHAT_URL||'https://t.me/teslaspacex_roadster',youtubeUrl:env.YOUTUBE_URL||'https://youtube.com/@rajtilakeditz?si=OLEQqNUEq8H4240c',isAdmin:isAdmin(env,verified.user.id)}})}
+  if(url.pathname==='/api/session'&&request.method==='POST'){verified=await auth(request,env,body);if((await readAdminSetting(env,'maintenance_mode','0'))==='1'&&!isAdmin(env,verified.user.id))return fail('NexusGram is temporarily under maintenance',503);verified.startParam=String(verified.startParam||body.startParam||url.searchParams.get('startapp')||'');const row=await ensureUser(env,verified);const user=await refreshed(env,row);return json({user,config:{botUsername:(env.BOT_USERNAME||'Nexusgram_official_bot').replace(/^@/,'').trim(),dailyBase:Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'daily_bonus','50')))),referralBonus:Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'referral_bonus','500')))),newsUrl:env.NEWS_URL||'https://t.me/nexusgram_official',chatUrl:env.CHAT_URL||'https://t.me/teslaspacex_roadster',youtubeUrl:env.YOUTUBE_URL||'https://youtube.com/@rajtilakeditz?si=OLEQqNUEq8H4240c',isAdmin:isAdmin(env,verified.user.id)}})}
   if(url.pathname==='/api/tap-batch'&&request.method==='POST'){
    verified=await auth(request,env,body);
    if((await readAdminSetting(env,'mining_enabled','1'))!=='1')return fail('Mining is temporarily paused',403);
@@ -310,7 +312,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
   if(url.pathname==='/api/admin/settings'&&request.method==='POST'){
    verified=await auth(request,env,body);if(!isAdmin(env,verified.user.id))return fail('Admin access denied',403);
    const keys=['tap_reward','energy_cost','daily_bonus','referral_bonus','ad_reward','telegram_task_reward','youtube_task_reward','redeem_code','redeem_reward','mining_enabled','ads_enabled','maintenance_mode','multitap_base_cost','energy_base_cost','recharge_base_cost','news_url','chat_url','youtube_url'];
-   const defaults={tap_reward:'1',energy_cost:'10',daily_bonus:'50',referral_bonus:'250',ad_reward:'25',telegram_task_reward:'25',youtube_task_reward:'25',redeem_code:'',redeem_reward:'100',mining_enabled:'1',ads_enabled:'0',maintenance_mode:'0',multitap_base_cost:'100',energy_base_cost:'150',recharge_base_cost:'125',news_url:env.NEWS_URL||'',chat_url:env.CHAT_URL||'',youtube_url:env.YOUTUBE_URL||''};
+   const defaults={tap_reward:'1',energy_cost:'10',daily_bonus:'50',referral_bonus:'500',ad_reward:'25',telegram_task_reward:'25',youtube_task_reward:'25',redeem_code:'',redeem_reward:'100',mining_enabled:'1',ads_enabled:'0',maintenance_mode:'0',multitap_base_cost:'100',energy_base_cost:'150',recharge_base_cost:'125',news_url:env.NEWS_URL||'',chat_url:env.CHAT_URL||'',youtube_url:env.YOUTUBE_URL||''};
    const settings={};for(const k of keys)settings[k]=await readAdminSetting(env,k,defaults[k]);
    return json({settings});
   }
