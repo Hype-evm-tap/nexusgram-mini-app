@@ -276,7 +276,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
     const claimed=await env.DB.prepare('UPDATE mining_claims SET last_claim_at=? WHERE telegram_id=? AND last_claim_at=? RETURNING telegram_id').bind(nextMiningAt,id,lastMiningAt).first();
     if(claimed)miningRewardPoints=elapsedHours*500;
    }
-   const updated=await env.DB.prepare('UPDATE users SET points=points+((?+multitap_level)*?)+?,energy=MAX(0,energy-?),updated_at=CASE WHEN MAX(0,energy-?)<=0 THEN ? ELSE updated_at END WHERE telegram_id=? AND energy>0 RETURNING telegram_id,energy').bind(tapReward,actualCount,charge,charge,now,id).first();
+   const updated=await env.DB.prepare('UPDATE users SET points=points+((?+multitap_level)*?)+?,energy=MAX(0,energy-?),updated_at=CASE WHEN MAX(0,energy-?)<=0 THEN ? ELSE updated_at END WHERE telegram_id=? AND energy>0 RETURNING telegram_id,energy').bind(tapReward,actualCount,miningRewardPoints,charge,charge,now,id).first();
    if(!updated)return fail('Not enough energy',409);
    if(Number(updated.energy||0)<=0){
     await env.DB.prepare('CREATE TABLE IF NOT EXISTS energy_cycles (telegram_id TEXT PRIMARY KEY, depleted_at INTEGER NOT NULL)').run();
