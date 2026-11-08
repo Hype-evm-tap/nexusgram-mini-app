@@ -156,7 +156,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
    if(!row)return fail('User not found',404);
    await env.DB.prepare('CREATE TABLE IF NOT EXISTS ad_claims (claim_id TEXT PRIMARY KEY, telegram_id TEXT NOT NULL, claim_day TEXT NOT NULL, created_at INTEGER NOT NULL)').run();
    const day=indiaDay(Date.now());
-   const limit=Math.max(1,Math.min(1000,Number(env.ADSGRAM_DAILY_LIMIT||1000)));
+   const limit=Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'ad_daily_limit',String(env.ADSGRAM_DAILY_LIMIT||1000)))));
    // Cooldown: max 1 server reward per 20s per user (AdsGram may retry)
    const recent=await env.DB.prepare('SELECT created_at FROM ad_claims WHERE telegram_id=? ORDER BY created_at DESC LIMIT 1').bind(userId).first();
    if(recent&&Date.now()-Number(recent.created_at||0)<20000)return json({ok:true,duplicate:true,message:'Cooldowned'});
@@ -164,7 +164,7 @@ if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
    if(Number(dayCount?.n||0)>=limit)return fail('Daily ad reward limit reached',409);
    const claimId='ag-'+userId+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,10);
    const claim=await env.DB.prepare('INSERT INTO ad_claims (claim_id,telegram_id,claim_day,created_at) VALUES (?,?,?,?)').bind(claimId,userId,day,Date.now()).run();
-   const reward=100;
+   const reward=Math.max(0,Math.min(100000,Number(await readAdminSetting(env,'ad_reward','50'))));
    await env.DB.prepare('UPDATE users SET points=points+? WHERE telegram_id=?').bind(reward,userId).run();
    await activateReferralIfEligible(env,userId);
    return json({ok:true,reward,telegramId:userId,claimId});
