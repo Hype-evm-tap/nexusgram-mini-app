@@ -420,7 +420,7 @@ if(url.pathname==='/api/withdrawals'&&request.method==='POST'){
    const action=String(body.action||'list');
    if(action==='list'){const rows=await env.DB.prepare("SELECT id,telegram_id,wallet_address,points,nxg_amount,status,created_at,updated_at,tx_hash FROM withdrawal_requests WHERE status='pending' ORDER BY created_at ASC LIMIT 50").all();return json({rows:rows.results||[]});}
    const rid=Number(body.id||0);if(!rid)return fail('Invalid withdrawal id',400);
-   const row=await env.DB.prepare("SELECT * FROM withdrawal_requests WHERE id=? AND status='pending'").bind(rid).first();if(!row)return fail('Withdrawal is no longer pending',409);
+   const row=await env.DB.prepare("SELECT * FROM withdrawal_requests WHERE id=? AND status IN ('pending','approved')").bind(rid).first();if(!row)return fail('Withdrawal is no longer pending/approved',409);
    if(action==='reject'){
      const upd=await env.DB.prepare("UPDATE withdrawal_requests SET status='rejected',updated_at=?,admin_id=? WHERE id=? AND status='pending'").bind(Date.now(),String(verified.user.id),rid).run();
      if(!(upd.meta?.changes>0))return fail('Withdrawal is no longer pending',409);
@@ -428,7 +428,7 @@ if(url.pathname==='/api/withdrawals'&&request.method==='POST'){
      return json({ok:true,message:'Withdrawal #'+rid+' rejected and '+Number(row.nxg_amount).toLocaleString()+' NXG refunded.'});
    }
    if(action!=='approve')return fail('Unknown withdrawal action',400);
-   const upd=await env.DB.prepare("UPDATE withdrawal_requests SET status='processing',updated_at=?,admin_id=? WHERE id=? AND status='pending'").bind(Date.now(),String(verified.user.id),rid).run();
+   const upd=await env.DB.prepare("UPDATE withdrawal_requests SET status='processing',updated_at=?,admin_id=? WHERE id=? AND status IN ('pending','approved')").bind(Date.now(),String(verified.user.id),rid).run();
    if(!(upd.meta?.changes>0))return fail('Withdrawal is no longer pending',409);
    if(payoutConfigured(env)){
      const pay=await sendNxgJetton(env,String(row.wallet_address),Number(row.nxg_amount));
