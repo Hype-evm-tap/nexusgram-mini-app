@@ -74,22 +74,30 @@ export class NftCollection implements Contract {
     via: Sender,
     opts: {
       index: number;
+      ownerAddress: Address;
       itemValue: bigint;
       contentUrl: string;
       value: bigint;
     },
   ) {
-    const itemContent = beginCell()
+    // TEP-62 collection mint payload:
+    // owner address + reference to the individual NFT content cell.
+    const offchainContent = beginCell()
       .storeUint(1, 8)
       .storeStringTail(opts.contentUrl)
       .endCell();
 
+    const nftContent = beginCell()
+      .storeAddress(opts.ownerAddress)
+      .storeRef(offchainContent)
+      .endCell();
+
     const body = beginCell()
-      .storeUint(1, 32)
-      .storeUint(0, 64)
+      .storeUint(1, 32) // deploy_nft_item
+      .storeUint(0, 64) // query_id
       .storeUint(opts.index, 64)
       .storeCoins(opts.itemValue)
-      .storeRef(itemContent)
+      .storeRef(nftContent)
       .endCell();
 
     await provider.internal(via, {
