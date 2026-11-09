@@ -31,11 +31,10 @@ export async function run(provider: NetworkProvider) {
     itemValue: toNano('0.05'),
     contentUrl:
       'https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nft/0.json',
-    value: toNano('0.08'),
+    value: toNano('0.04'), // Lower wallet contribution; collection balance can cover the 0.05 TON item funding.
   });
 
-  await provider.waitForLastTransaction();
   console.log(
-    'Mint transaction confirmed by the wallet provider. Verify the NFT item address and get_nft_data on TONScan before announcing it as minted.',
+    'Wallet request submitted. This script does not claim the NFT is minted; verify the item contract transaction and get_nft_data on TONScan.',
   );
 }
