@@ -1,7 +1,7 @@
 {
   "name": "NexusGram Robot #001",
   "description": "Legendary NexusGram robotic collectible on TON.",
-  "image": "https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/robot.svg",
+  "image": "https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nxg-robot-001.png",
   "attributes": [
     {
       "trait_type": "Rarity",
