@@ -1,6 +1,6 @@
 import { Address, toNano } from '@ton/core';
 import { compile, NetworkProvider } from '@ton/blueprint';
-import { NftCollection } from '../wrappers/NftCollection.js';
+import { NftCollection } from '../wrappers/NftCollection';
 
 const OWNER = Address.parse(
   'UQAmNEgAkUaJFRKF0wLeqrbKbpGlTtdTWzT_YoCEowW-ob2c',
