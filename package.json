@@ -4,10 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "deploy:collection": "tsx scripts/deploy-collection.ts",
-    "mint:robot": "tsx scripts/mint-robot.ts",
-    "build:nft": "npx blueprint build",
-    "deploy:nft": "npx blueprint run --mainnet --tonconnect --tonscan"
+    "build:nft": "npx blueprint build --all",
+    "deploy:collection": "npx blueprint run deploy-collection --mainnet --tonconnect --tonscan",
+    "mint:robot": "npx blueprint run mint-robot --mainnet --tonconnect --tonscan"
   },
   "dependencies": {
     "@ton/core": "^0.60.1",
@@ -16,6 +15,6 @@
     "tsx": "^4.19.2"
   },
   "devDependencies": {
-    "@ton/blueprint": "^0.31.1"
+    "@ton/blueprint": "^0.45.0"
   }
 }
