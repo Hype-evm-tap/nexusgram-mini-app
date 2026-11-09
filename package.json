@@ -1,11 +1,8 @@
 {
-  "name": "nexusgram-mini-app",
-  "private": true,
-  "version": "1.0.0",
-  "type": "module",
-  "dependencies": {
-    "@ton/core": "^0.60.1",
-    "@ton/crypto": "^3.3.0",
-    "@ton/ton": "^15.2.1"
-  }
+  "name":"nexusgram-mini-app",
+  "private":true,
+  "version":"1.0.0",
+  "type":"module",
+  "scripts":{"deploy:collection":"tsx scripts/deploy-collection.ts","mint:robot":"tsx scripts/mint-robot.ts"},
+  "dependencies":{"@ton/core":"^0.60.1","@ton/crypto":"^3.3.0","@ton/ton":"^15.2.1","tsx":"^4.19.2"}
 }
