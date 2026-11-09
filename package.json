@@ -2,7 +2,6 @@
   "name": "nexusgram-mini-app",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "build:nft": "npx blueprint build --all",
     "deploy:collection": "npx blueprint run deploy-collection --mainnet --tonconnect --tonscan",
