@@ -2,6 +2,7 @@
   "network": "mainnet",
   "owner_wallet": "UQAmNEgAkUaJFRKF0wLeqrbKbpGlTtdTWzT_YoCEowW-ob2c",
   "collection_name": "NexusGram Collection",
+  "collection_address": "EQDIDCxDJSrfbak2rJtIcnoe_y_DOjeTGuuvL5eJGoSMZH6L",
   "nft_index": 0,
   "nft_name": "NexusGram Robot #001",
   "planned_supply": 10000,
@@ -10,5 +11,5 @@
   "standard": "TEP-62",
   "metadata": "TEP-64",
   "royalty": "TEP-66",
-  "status": "prepared_not_deployed"
+  "status": "collection_deployed_mint_not_yet_confirmed"
 }
