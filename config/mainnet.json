@@ -1,0 +1,19 @@
+{
+  "network": "mainnet",
+  "ownerAddress": "UQAmNEgAkUaJFRKF0wLeqrbKbpGlTtdTWzT_YoCEowW-ob2c",
+  "collectionName": "NexusGram Collection",
+  "collectionDescription": "NexusGram robotic collectibles on TON.",
+  "collectionSize": 10000,
+  "firstItem": {
+    "index": 0,
+    "name": "NexusGram Robot #001",
+    "priceTon": 25,
+    "rarity": "Legendary"
+  },
+  "standard": {
+    "nft": "TEP-62",
+    "metadata": "TEP-64",
+    "royalty": "TEP-66"
+  },
+  "deployment": "Requires a user-signed mainnet transaction from ownerAddress; seed/private keys are never stored in the repository."
+}
