@@ -29,8 +29,7 @@ export async function run(provider: NetworkProvider) {
     index: 0,
     ownerAddress: OWNER,
     itemValue: toNano('0.05'),
-    contentUrl:
-      'https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nft/0.json',
+    contentUrl: '0.json', // Collection common_content_url already points to /nft/; TEP-62 appends this relative filename.
     value: toNano('0.04'), // Lower wallet contribution; collection balance can cover the 0.05 TON item funding.
   });
 
