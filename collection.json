@@ -1,5 +1,8 @@
 {
   "name": "NexusGram Collection",
   "description": "NexusGram robotic collectibles on TON.",
-  "image": "https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/robot.svg"
+  "image": "https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/robot.svg",
+  "external_link": "https://github.com/Hype-evm-tap/nexusgram-mini-app",
+  "seller_fee_basis_points": 250,
+  "fee_recipient": "UQAmNEgAkUaJFRKF0wLeqrbKbpGlTtdTWzT_YoCEowW-ob2c"
 }
