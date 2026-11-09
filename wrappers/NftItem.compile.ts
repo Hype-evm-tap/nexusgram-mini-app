@@ -1,2 +1,10 @@
 import { CompilerConfig } from '@ton/blueprint';
-export const compile: CompilerConfig = { targets: ['contracts/stdlib.fc','contracts/params.fc','contracts/op-codes.fc','contracts/nft-item.fc'] };
+
+export const compile: CompilerConfig = {
+  targets: [
+    'contracts/stdlib.fc',
+    'contracts/params.fc',
+    'contracts/op-codes.fc',
+    'contracts/nft-item.fc',
+  ],
+};
