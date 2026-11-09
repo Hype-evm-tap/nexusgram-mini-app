@@ -1,0 +1,23 @@
+{
+  "name": "NexusGram Robot #001",
+  "description": "A futuristic NexusGram robotic collectible on TON.",
+  "image": "https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/robot.svg",
+  "attributes": [
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Collection",
+      "value": "NexusGram"
+    },
+    {
+      "trait_type": "Edition",
+      "value": "001"
+    },
+    {
+      "trait_type": "Supply",
+      "value": "10000"
+    }
+  ]
+}
