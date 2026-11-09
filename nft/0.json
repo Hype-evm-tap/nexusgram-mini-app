@@ -1,6 +1,6 @@
 {
   "name": "NexusGram Robot #001",
-  "description": "A futuristic NexusGram robotic collectible on TON.",
+  "description": "Legendary NexusGram robotic collectible on TON.",
   "image": "https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/robot.svg",
   "attributes": [
     {
@@ -16,7 +16,7 @@
       "value": "001"
     },
     {
-      "trait_type": "Supply",
+      "trait_type": "Planned Supply",
       "value": "10000"
     }
   ]
