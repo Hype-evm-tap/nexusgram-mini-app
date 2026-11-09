@@ -17,23 +17,23 @@ export async function run(provider: NetworkProvider) {
   );
 
   console.log('Network: TON mainnet');
-  console.log('Minting NexusGram Robot #001 to:', OWNER.toString());
+  console.log('Retrying NexusGram Robot #001 to:', OWNER.toString());
   console.log('Collection:', COLLECTION_ADDRESS);
   console.log(
     'NFT metadata:',
     'https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nft/0.json',
   );
-  console.log('Mint index: 0 (only the first NFT)');
+  console.log('Mint index: 0 (retry failed, uninitialized item address)');
 
   await collection.sendMint(provider.sender(), {
     index: 0,
     ownerAddress: OWNER,
-    itemValue: toNano('0.05'),
-    contentUrl: '0.json', // Collection common_content_url already points to /nft/; TEP-62 appends this relative filename.
-    value: toNano('0.04'), // Lower wallet contribution; collection balance can cover the 0.05 TON item funding.
+    itemValue: toNano('0.08'),
+    contentUrl: '0.json',
+    value: toNano('0.04'),
   });
 
   console.log(
-    'Wallet request submitted. This script does not claim the NFT is minted; verify the item contract transaction and get_nft_data on TONScan.',
+    'Mint request submitted. Confirm the item contract is active and get_nft_data reports initialized before treating the NFT as minted.',
   );
 }
