@@ -1,0 +1,1 @@
+document.getElementById("buy").addEventListener("click",()=>{document.getElementById("status").textContent="TON wallet purchase flow will be enabled after the sale contract is deployed."});
