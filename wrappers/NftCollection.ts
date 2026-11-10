@@ -33,8 +33,9 @@ export class NftCollection implements Contract {
       .storeStringTail(config.collectionContentUrl)
       .endCell();
 
+    // The collection getter adds the single TEP-64 off-chain tag (0x01)
+    // when composing item metadata. The common prefix itself must be raw URL text.
     const commonContent = beginCell()
-      .storeUint(1, 8)
       .storeStringTail(config.commonContentUrl)
       .endCell();
 
@@ -82,14 +83,15 @@ export class NftCollection implements Contract {
   ) {
     // TEP-62 collection mint payload:
     // owner address + reference to the individual NFT content cell.
-    const offchainContent = beginCell()
-      .storeUint(1, 8)
+    // The collection's get_nft_content() adds the single TEP-64 off-chain
+    // tag (0x01), so the item content must contain only the suffix.
+    const individualContent = beginCell()
       .storeStringTail(opts.contentUrl)
       .endCell();
 
     const nftContent = beginCell()
       .storeAddress(opts.ownerAddress)
-      .storeRef(offchainContent)
+      .storeRef(individualContent)
       .endCell();
 
     const body = beginCell()
