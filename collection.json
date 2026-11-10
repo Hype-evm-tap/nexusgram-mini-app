@@ -1,8 +1,9 @@
 {
-  "name": "NexusGram Collection",
-  "description": "NexusGram robotic collectibles on TON.",
+  "name": "NexusGram",
+  "description": "NexusGram robotic collectibles on TON — the official NXG digital collectible collection.",
   "image": "https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nxg-robot-001.png",
   "external_link": "https://github.com/Hype-evm-tap/nexusgram-mini-app",
+  "external_url": "https://github.com/Hype-evm-tap/nexusgram-mini-app",
   "seller_fee_basis_points": 250,
   "fee_recipient": "UQAmNEgAkUaJFRKF0wLeqrbKbpGlTtdTWzT_YoCEowW-ob2c"
 }
