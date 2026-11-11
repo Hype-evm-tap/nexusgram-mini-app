@@ -1,0 +1,39 @@
+name: Apply uploaded NexusGram ZIP
+
+on:
+  push:
+    paths:
+      - "nexusgram-mini-app-fixed.zip"
+
+permissions:
+  contents: write
+
+jobs:
+  apply-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract and replace repository files
+        shell: bash
+        run: |
+          set -e
+          rm -rf .zip_extract
+          mkdir .zip_extract
+          unzip -q nexusgram-mini-app-fixed.zip -d .zip_extract
+          ROOT="$(find .zip_extract -mindepth 1 -maxdepth 1 -type d | head -n1)"
+          test -n "$ROOT"
+          find . -mindepth 1 -maxdepth 1 ! -name ".git" ! -name ".zip_extract" ! -name "nexusgram-mini-app-fixed.zip" -exec rm -rf {} +
+          cp -a "$ROOT"/. .
+          rm -rf .zip_extract nexusgram-mini-app-fixed.zip
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No file changes."
+            exit 0
+          fi
+          git commit -m "Replace NexusGram app with fixed ZIP"
+          git push
