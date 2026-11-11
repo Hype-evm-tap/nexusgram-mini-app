@@ -16,24 +16,25 @@ export async function run(provider: NetworkProvider) {
     new NftCollection(Address.parse(COLLECTION_ADDRESS)),
   );
 
+  // Full absolute metadata URL — fixes empty metadata on explorers
+  const METADATA_URL =
+    'https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nft/0.json';
+
   console.log('Network: TON mainnet');
-  console.log('Retrying NexusGram Robot #001 to:', OWNER.toString());
+  console.log('Minting NexusGram Robot #001 to:', OWNER.toString());
   console.log('Collection:', COLLECTION_ADDRESS);
-  console.log(
-    'NFT metadata:',
-    'https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nft/0.json',
-  );
-  console.log('Mint index: 0 (retry failed, uninitialized item address)');
+  console.log('NFT metadata (absolute):', METADATA_URL);
+  console.log('Mint index: 0');
 
   await collection.sendMint(provider.sender(), {
     index: 0,
     ownerAddress: OWNER,
     itemValue: toNano('0.08'),
-    contentUrl: '0.json',
+    contentUrl: METADATA_URL, // absolute URL instead of relative "0.json"
     value: toNano('0.04'),
   });
 
   console.log(
-    'Mint request submitted. Confirm the item contract is active and get_nft_data reports initialized before treating the NFT as minted.',
+    'Mint request submitted. After confirmation check get_nft_data / tonviewer — metadata + robot image should now resolve.',
   );
 }
