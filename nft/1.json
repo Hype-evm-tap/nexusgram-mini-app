@@ -1,0 +1,28 @@
+{
+  "name": "NexusGram Robot #002",
+  "description": "The second NexusGram robotic collectible on TON, featuring the NXG robot and the NexusGram ecosystem.",
+  "image": "https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nxg-robot-001.png",
+  "external_url": "https://github.com/Hype-evm-tap/nexusgram-mini-app",
+  "attributes": [
+    {
+      "trait_type": "Collection",
+      "value": "NexusGram"
+    },
+    {
+      "trait_type": "Edition",
+      "value": "002"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Legendary"
+    },
+    {
+      "trait_type": "Network",
+      "value": "TON"
+    },
+    {
+      "trait_type": "Token",
+      "value": "NXG"
+    }
+  ]
+}
