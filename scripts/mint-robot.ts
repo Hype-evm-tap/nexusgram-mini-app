@@ -18,16 +18,16 @@ export async function run(provider: NetworkProvider) {
 
   // Full absolute metadata URL — fixes empty metadata on explorers
   const METADATA_URL =
-    'https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nft/0.json';
+    'https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nft/1.json';
 
   console.log('Network: TON mainnet');
-  console.log('Minting NexusGram Robot #001 to:', OWNER.toString());
+  console.log('Minting NexusGram Robot #002 to:', OWNER.toString());
   console.log('Collection:', COLLECTION_ADDRESS);
   console.log('NFT metadata (absolute):', METADATA_URL);
-  console.log('Mint index: 0');
+  console.log('Mint index: 1');
 
   await collection.sendMint(provider.sender(), {
-    index: 0,
+    index: 1,
     ownerAddress: OWNER,
     itemValue: toNano('0.08'),
     contentUrl: METADATA_URL, // absolute URL instead of relative "0.json"
