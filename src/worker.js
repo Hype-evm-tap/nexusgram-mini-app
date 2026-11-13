@@ -47,36 +47,12 @@ function normalizeBotToken(value){
   return token.trim();
 }
 async function verifyInitData(initData,botToken){
-  initData=String(initData||'').trim();
-  botToken=normalizeBotToken(botToken);
   if(!initData||!botToken)throw new Error('Telegram sign-in is not configured');
-  const params=new URLSearchParams(initData);
-  const received=String(params.get('hash')||'').trim().toLowerCase();
-  if(!received)throw new Error('Invalid Telegram launch data');
-  params.delete('hash');
-  const authDate=Number(params.get('auth_date')||0);
-  if(!authDate||Math.floor(Date.now()/1000)-authDate>MAX_INIT_AGE)throw new Error('Telegram session expired. Reopen the Mini App.');
-  params.sort();
-  const check=[...params.entries()].map(([k,v])=>k+'='+v).join('\n');
-  const secret=await hmac(new TextEncoder().encode(botToken),'WebAppData');
-  const expected=hex(await hmac(secret,check));
-  if(!safeEqual(expected,received)){
-  try{
-    const check=await fetch('https://api.telegram.org/bot'+normalizeBotToken(botToken)+'/getMe');
-    const td=await check.json().catch(()=>({}));
-    if(td.ok&&td.result?.id){
-      try{if(await verifyTelegramSignature(new URLSearchParams(initData),td.result.id)){}else throw new Error('ed25519 failed');}
-      catch(e){if(String(e?.message||'')!=='ed25519 failed')throw e;
-        throw new Error('Telegram signature mismatch. Worker BOT_TOKEN is valid for @'+String(td.result?.username||'unknown')+', but Telegram hash/signature validation failed. Reopen the Mini App from @Nexusgram_official_bot.');
-      }
-    }else if(td.description==='Not Found')throw new Error('Telegram BOT_TOKEN is invalid or revoked. Replace the BOT_TOKEN secret with the token of @Nexusgram_official_bot.');
-  }catch(e){if(String(e?.message||'').startsWith('Telegram signature mismatch')||String(e?.message||'').startsWith('Telegram BOT_TOKEN'))throw e;}
-  throw new Error('Telegram signature verification failed');
-}
-  let user;
-  try{user=JSON.parse(params.get('user')||'{}')}catch{throw new Error('Invalid Telegram user data')}
-  if(!user.id)throw new Error('Telegram user missing');
-  return {user,startParam:params.get('start_param')||''};
+  const params=new URLSearchParams(initData);const received=params.get('hash');if(!received)throw new Error('Invalid Telegram launch data');params.delete('hash');
+  const authDate=Number(params.get('auth_date')||0);if(!authDate||Math.floor(Date.now()/1000)-authDate>MAX_INIT_AGE)throw new Error('Telegram session expired. Reopen the Mini App.');
+  params.sort();const check=[...params.entries()].map(([k,v])=>`${k}=${v}`).join('\\n');
+  const secret=await hmac(new TextEncoder().encode('WebAppData'),botToken);const expected=hex(await hmac(secret,check));if(!safeEqual(expected,received))throw new Error('Telegram signature verification failed');
+  const user=JSON.parse(params.get('user')||'{}');if(!user.id)throw new Error('Telegram user missing');return {user,startParam:params.get('start_param')||''};
 }
 function energyState(row,now,depletedAt,regenIntervalMs=REGEN_INTERVAL_MS){
   const max=Number(row.max_energy||START_ENERGY);
