@@ -53,9 +53,8 @@ async function verifyInitData(initData,botToken){
   const params=new URLSearchParams(initData);
   const received=String(params.get('hash')||'').trim().toLowerCase();
   if(!received)throw new Error('Invalid Telegram launch data');
-  // Must exclude both hash and signature (Bot API 8.0+) from data-check-string
+  // Bot-token HMAC excludes only hash. Keep signature in the HMAC data-check-string when Telegram supplies it.
   params.delete('hash');
-  params.delete('signature');
   const authDate=Number(params.get('auth_date')||0);
   if(!authDate||Math.floor(Date.now()/1000)-authDate>MAX_INIT_AGE)throw new Error('Telegram session expired. Reopen the Mini App.');
   params.sort();
