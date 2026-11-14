@@ -201,16 +201,7 @@ async function listLinks(env,includeDisabled=false){await ensureLinksTable(env);
 
 async function handle(request,env){
 try{
-const url=new URL(request.url);const botResponse=await handleTelegramRequest(request,env,url);if(botResponse)return botResponse;if(request.method==='OPTIONS')return new Response(null,{headers:{'access-control-allow-origin':'*','access-control-allow-methods':'GET,POST,OPTIONS','access-control-allow-headers':'content-type'}});if(url.pathname==='/logo.png'){
-  try{
-    const remote=await fetch('https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_png/cloudinary-tools-uploads/mbxkrbob06myt6swcgcb');
-    if(remote.ok) return new Response(remote.body,{headers:{'content-type':remote.headers.get('content-type')||'image/png','cache-control':'public, max-age=300'}});
-  }catch(e){}
-  try{
-    const bin=Uint8Array.from(atob(LOGO_WEBP_B64),c=>c.charCodeAt(0));
-    return new Response(bin,{headers:{'content-type':'image/webp','cache-control':'public, max-age=30, must-revalidate'}});
-  }catch(e){return new Response('logo unavailable',{status:502})}
-}
+const url=new URL(request.url);const botResponse=await handleTelegramRequest(request,env,url);if(botResponse)return botResponse;if(request.method==='OPTIONS')return new Response(null,{headers:{'access-control-allow-origin':'*','access-control-allow-methods':'GET,POST,OPTIONS','access-control-allow-headers':'content-type'}});if(url.pathname==='/logo.png'){return new Response(null,{status:302,headers:{'location':'https://res.cloudinary.com/dtz0urit6/image/upload/q_auto:best,f_jpg/cloudinary-tools-uploads/p7vo587in5inbubxjllu','cache-control':'no-store'}});}
 if(url.pathname==='/health')return json({ok:true,service:'nexusgram-api'});
 if(url.pathname==='/api/telegram-status'&&request.method==='GET'){
   try{
