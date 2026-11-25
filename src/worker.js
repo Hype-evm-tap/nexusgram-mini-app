@@ -497,6 +497,14 @@ if(url.pathname==='/api/ad-reward'&&request.method==='POST'){verified=await auth
  if(url.pathname==='/'||url.pathname==='/index.html') return new Response(EMBEDDED_APP_HTML,{headers:{'content-type':'text/html; charset=utf-8','cache-control':'public, max-age=30, must-revalidate'}});
  if(url.pathname==='/app.js') return new Response(EMBEDDED_APP_JS,{headers:{'content-type':'application/javascript; charset=utf-8','cache-control':'public, max-age=60, must-revalidate','cdn-cache-control':'public, max-age=60'}});
  if(url.pathname==='/app.css') return new Response(EMBEDDED_APP_CSS,{headers:{'content-type':'text/css; charset=utf-8','cache-control':'public, max-age=60, must-revalidate','cdn-cache-control':'public, max-age=60'}});
+ if(url.pathname==='/0.json'||url.pathname==='/nft/0.json'){
+  const metadataUrl='https://raw.githubusercontent.com/Hype-evm-tap/nexusgram-mini-app/main/nft/0.json';
+  const metadataResponse=await fetch(metadataUrl,{headers:{'accept':'application/json'}});
+  if(!metadataResponse.ok)return new Response('NFT metadata not found',{status:metadataResponse.status===404?404:502,headers:{'content-type':'text/plain; charset=utf-8','access-control-allow-origin':'*'}});
+  const metadataText=await metadataResponse.text();
+  try{JSON.parse(metadataText);}catch{return new Response('NFT metadata is invalid JSON',{status:502,headers:{'content-type':'text/plain; charset=utf-8','access-control-allow-origin':'*'}});}
+  return new Response(metadataText,{headers:{'content-type':'application/json; charset=utf-8','access-control-allow-origin':'*','cache-control':'public, max-age=300'}});
+ }
  if(env.ASSETS)return env.ASSETS.fetch(request);
  return new Response('NexusGram assets not configured',{status:404});
 }catch(err){
